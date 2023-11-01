@@ -1,4 +1,4 @@
-import React from "react"
+import "semantic-ui-css/semantic.min.css"
 import "./App.css"
 import { useState, useEffect } from 'react'
 import Quote from './components/Quote'
@@ -28,5 +28,5 @@ function App() {
     </BrowserRouter>
     </div>
   )
-  }
+}
 export default App
