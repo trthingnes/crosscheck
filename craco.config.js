@@ -11,7 +11,7 @@ module.exports = {
           ].filter(Boolean),
           // This defines the name and file path for the separately compiled files
           // Filename will be 'build/static/js/[name]' where name is [name]: "path"
-          service: "./src/chrome/service.ts",
+          serviceWorker: "./src/chrome/service-worker.ts",
         },
         output: {
           ...webpackConfig.output,
