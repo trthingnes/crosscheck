@@ -3,11 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
-        "@types/firebase": "^3.2.1",
-        "@types/jest": "^27.5.2",
-        "@types/node": "^16.18.59",
-        "@types/react": "^18.2.20",
-        "@types/react-dom": "^18.2.14",
+        "@craco/craco": "^7.1.0",
         "firebase": "^10.5.2",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
@@ -17,9 +13,18 @@
         "semantic-ui-react": "^2.1.4",
         "typescript": "^4.9.5"
     },
+    "devDependencies": {
+        "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+        "@types/chrome": "^0.0.248",
+        "@types/firebase": "^3.2.1",
+        "@types/jest": "^27.5.2",
+        "@types/node": "^16.18.59",
+        "@types/react": "^18.2.20",
+        "@types/react-dom": "^18.2.14"
+    },
     "scripts": {
         "start": "react-scripts start",
-        "build": "set INLINE_RUNTIME_CHUNK=false && react-scripts build",
+        "build": "set INLINE_RUNTIME_CHUNK=false && craco build",
         "test": "react-scripts test",
         "eject": "react-scripts eject"
     },
