@@ -3,11 +3,6 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
-        "@types/firebase": "^3.2.1",
-        "@types/jest": "^27.5.2",
-        "@types/node": "^16.18.59",
-        "@types/react": "^18.2.20",
-        "@types/react-dom": "^18.2.14",
         "firebase": "^10.5.2",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
@@ -16,6 +11,14 @@
         "semantic-ui-css": "^2.5.0",
         "semantic-ui-react": "^2.1.4",
         "typescript": "^4.9.5"
+    },
+    "devDependencies": {
+        "@types/chrome": "^0.0.248",
+        "@types/firebase": "^3.2.1",
+        "@types/jest": "^27.5.2",
+        "@types/node": "^16.18.59",
+        "@types/react": "^18.2.20",
+        "@types/react-dom": "^18.2.14"
     },
     "scripts": {
         "start": "react-scripts start",
