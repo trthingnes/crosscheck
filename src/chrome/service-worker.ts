@@ -23,6 +23,7 @@ function handleContextMenuClick(data: chrome.contextMenus.OnClickData) {
     const selection = data.selectionText
 
     // TODO: Do something with url and selection here, and give the user a success/failure notification.
+    console.log(url, selection)
 
     // ! Opening the extension popup is not possible programatically. It seems like Google designed it that way.
     chrome.notifications.create({
