@@ -16,8 +16,6 @@ function App() {
     setQuotes(data)
   }, []);
 
-
-
   return (
     <div className="App">
       <BrowserRouter>
