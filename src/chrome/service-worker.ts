@@ -1,30 +1,37 @@
-import { CONTEXT_MENU_TEXT } from "Constants"
+import {
+  SELECTION_SUBMIT_CONTEXT_MENU_MESSAGE,
+  SELECTION_SUBMIT_SUCCESS_NOTIFICATION_MESSAGE,
+  SELECTION_SUBMIT_SUCCESS_NOTIFICATION_TITLE,
+} from "Constants"
 
-const CONTEXT_MENU_ID = "selection-submit"
-const CONTEXT_MENU_CONTEXTS: chrome.contextMenus.ContextType[] = ["selection"]
+const contextMenuId = "selection-submit"
+const contextMenuContexts: chrome.contextMenus.ContextType[] = ["selection"]
+
+chrome.runtime.onInstalled.addListener(function () {
+  chrome.contextMenus.create({
+    title: SELECTION_SUBMIT_CONTEXT_MENU_MESSAGE,
+    contexts: contextMenuContexts,
+    id: contextMenuId,
+  })
+})
 
 chrome.contextMenus.onClicked.addListener(handleContextMenuClick)
 
 function handleContextMenuClick(data: chrome.contextMenus.OnClickData) {
-  if (data.menuItemId === CONTEXT_MENU_ID) {
-    chrome.runtime.sendMessage(data.selectionText)
+  if (data.menuItemId === contextMenuId) {
+    const url = data.frameUrl
+    const selection = data.selectionText
+
+    // TODO: Do something with url and selection here, and give the user a success/failure notification.
+
+    // ! Opening the extension popup is not possible programatically. It seems like Google designed it that way.
+    chrome.notifications.create({
+      type: "basic",
+      iconUrl: "../../icons/icon128.png",
+      title: SELECTION_SUBMIT_SUCCESS_NOTIFICATION_TITLE,
+      message: SELECTION_SUBMIT_SUCCESS_NOTIFICATION_MESSAGE,
+    })
   }
 }
-
-// TODO: Receiving end does not exist?
-// https://stackoverflow.com/questions/54181734/chrome-extension-message-passing-unchecked-runtime-lasterror-could-not-establi/54686484#54686484
-chrome.runtime.onConnect.addListener(() => {
-  chrome.runtime.onMessage.addListener((selection: string) => {
-    console.info("Received message", selection)
-  })
-})
-
-chrome.runtime.onInstalled.addListener(function () {
-  chrome.contextMenus.create({
-    title: CONTEXT_MENU_TEXT,
-    contexts: CONTEXT_MENU_CONTEXTS,
-    id: CONTEXT_MENU_ID,
-  })
-})
 
 export {}

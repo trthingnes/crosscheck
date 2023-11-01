@@ -4,7 +4,7 @@
   "version": "1.0.0",
 
   "description": "Crowdsourcing browser extension that allows users to contribute information about online content.",
-  "permissions": ["activeTab", "contextMenus"],
+  "permissions": ["activeTab", "contextMenus", "notifications"],
   "action": {
     "default_popup": "index.html",
     "default_title": "Open the CrossCheck Overlay"
