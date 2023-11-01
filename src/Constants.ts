@@ -1,0 +1,1 @@
+export const CONTEXT_MENU_TEXT = "Submit highlighted text for discussion"
