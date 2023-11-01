@@ -1,30 +1,26 @@
-import React from "react"
+import "semantic-ui-css/semantic.min.css"
 import "./App.css"
-import { useState, useEffect } from 'react'
-import Login from './components/Login'
-import Homepage from './components/Homepage'
+import { useState } from "react"
+import Login from "./components/Login"
+import Homepage from "./components/Homepage"
 
 function App() {
   const [user, setUser] = useState("")
 
-  if (!user){
+  if (!user) {
     return (
       <div className="App">
-      <header className="App-header">
-        Crosscheck
-      </header>
-    <Login setUser={setUser} />
-    </div>
-      ) 
-  } 
+        <header className="App-header">Crosscheck</header>
+        <Login setUser={setUser} />
+      </div>
+    )
+  }
 
   return (
     <div className="App">
-      <header className="App-header">
-        Crosscheck
-      </header>
-      <Homepage user={user}/>
+      <header className="App-header">Crosscheck</header>
+      <Homepage user={user} />
     </div>
   )
-  }
+}
 export default App
