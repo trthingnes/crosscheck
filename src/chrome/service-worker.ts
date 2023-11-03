@@ -2,7 +2,7 @@ import {
   SELECTION_SUBMIT_CONTEXT_MENU_MESSAGE,
   SELECTION_SUBMIT_SUCCESS_NOTIFICATION_MESSAGE,
   SELECTION_SUBMIT_SUCCESS_NOTIFICATION_TITLE,
-} from "Constants"
+} from "utils/Constants"
 
 const contextMenuId = "selection-submit"
 const contextMenuContexts: chrome.contextMenus.ContextType[] = ["selection"]
