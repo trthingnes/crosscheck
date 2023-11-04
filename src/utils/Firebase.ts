@@ -54,8 +54,8 @@ async function getHighlights() {
 
 async function getHighlightsForUrl(url: string | undefined) {
     if (!url) return []
-    const q = query(highlightCollection, where('url', '==', url))
-    return (await getDocs(q).then(getDocumentsFromSnapshot)) as Highlight[]
+    const q = query(highlightCollection, where('url', '==', url)) 
+       return (await getDocs(q).then(getDocumentsFromSnapshot)) as Highlight[]
 }
 
 async function getPosts() {
@@ -65,8 +65,9 @@ async function getPosts() {
 }
 
 
-async function getPostsByHighlight(highlightID: string) {
-    const q = query(postCollection, where('highlight', '==', `/Highlight/${highlightID}`) )
+async function getPostsByHighlight(highlight: string) {
+    const docRef = doc(highlightCollection, highlight);
+    const q = query(postCollection, where('highlight','==', docRef))
     return (await getDocs(q).then(getDocumentsFromSnapshot)) as Post[]
 }
 
@@ -93,12 +94,13 @@ async function updateHighlight(highlight: Highlight) {
 }
 
 async function addPost(highlight: string,post: Post){
+    const docRef = doc(highlightCollection, highlight);
     const newDocRef = doc(postCollection)
     await setDoc(newDocRef, {
         downvotes: post.downvotes,
         upvotes: post.upvotes,
         comment: post.comment,
-        highlight: `/Highlight/${highlight}`,
+        highlight: docRef,
         sources: post.sources,
         id: newDocRef.id
       });
@@ -109,7 +111,7 @@ async function updatePost(highlight: string,post: Post){
         downvotes: post.downvotes,
         upvotes: post.upvotes,
         comment: post.comment,
-        highlight:  `/Highlight/${highlight}`,
+        highlight: post.highlight,
         sources: post.sources,
         id: post.id 
           });
