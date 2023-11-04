@@ -54,7 +54,7 @@ async function getHighlights() {
 
 async function getHighlightsForUrl(url: string | undefined) {
     if (!url) return []
-    const q = query(highlightCollection, where('url', '==', "https://www.bbc.com/news/business-67294106"))
+    const q = query(highlightCollection, where('url', '==', url))
     return (await getDocs(q).then(getDocumentsFromSnapshot)) as Highlight[]
 }
 
@@ -63,6 +63,7 @@ async function getPosts() {
         getDocumentsFromSnapshot,
     )) as Post[]
 }
+
 
 async function getPostsByHighlight(highlightID: string) {
     const q = query(postCollection, where('highlight', '==', `/Highlight/${highlightID}`) )
@@ -97,16 +98,18 @@ async function addPost(highlight: string,post: Post){
         downvotes: post.downvotes,
         upvotes: post.upvotes,
         comment: post.comment,
+        highlight: `/Highlight/${highlight}`,
         sources: post.sources,
         id: newDocRef.id
       });
 }
 
-async function updatePost(post: Post){
+async function updatePost(highlight: string,post: Post){
     await setDoc(doc(postCollection, post.id), {
         downvotes: post.downvotes,
         upvotes: post.upvotes,
         comment: post.comment,
+        highlight:  `/Highlight/${highlight}`,
         sources: post.sources,
         id: post.id 
           });
