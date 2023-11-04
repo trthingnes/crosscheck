@@ -50,7 +50,9 @@ async function getHighlights() {
     )) as Highlight[]
 }
 
-async function getHighlightsForUrl(url: string) {
+async function getHighlightsForUrl(url: string | undefined) {
+    if (!url) return []
+
     const q = query(highlightCollection, where('url', '==', url))
     return (await getDocs(q).then(getDocumentsFromSnapshot)) as Highlight[]
 }

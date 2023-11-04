@@ -4,7 +4,12 @@
     "trailingComma": "all",
     "singleQuote": true,
     "semi": false,
-    "importOrder": ["^utils/(.*)$", "^components/(.*)$", "^[./]"],
+    "importOrder": [
+        "<THIRD_PARTY_MODULES>",
+        "^utils/(.*)$",
+        "^components/(.*)$",
+        "^[./]"
+    ],
     "importOrderSeparation": true,
     "importOrderSortSpecifiers": true
 }

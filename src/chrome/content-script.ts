@@ -1,6 +1,8 @@
 import { getHighlightsForUrl } from 'utils/Firebase'
 
-getHighlightsForUrl(window.location.href).then((highlights) => {
+const url = window.location.href
+
+getHighlightsForUrl(url).then((highlights) => {
     // Replace all exact quote with highlighted versions
     let html = document.body.innerHTML
 
