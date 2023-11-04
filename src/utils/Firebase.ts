@@ -1,8 +1,10 @@
 import { initializeApp } from 'firebase/app'
 import {
+    doc,
     getFirestore,
     collection,
     getDocs,
+    setDoc,
     query,
     where,
     QuerySnapshot,
@@ -52,8 +54,7 @@ async function getHighlights() {
 
 async function getHighlightsForUrl(url: string | undefined) {
     if (!url) return []
-
-    const q = query(highlightCollection, where('url', '==', url))
+    const q = query(highlightCollection, where('url', '==', "https://www.bbc.com/news/business-67294106"))
     return (await getDocs(q).then(getDocumentsFromSnapshot)) as Highlight[]
 }
 
@@ -63,4 +64,54 @@ async function getPosts() {
     )) as Post[]
 }
 
-export { getHighlights, getHighlightsForUrl, getPosts }
+async function getPostsByHighlight(highlightID: string) {
+    const q = query(postCollection, where('highlight', '==', `/Highlight/${highlightID}`) )
+    return (await getDocs(q).then(getDocumentsFromSnapshot)) as Post[]
+}
+
+async function addHighlight(highlight: Highlight) {
+    const newDocRef = doc(highlightCollection)
+    await setDoc(newDocRef, {
+        downvotes: highlight.downvotes,
+        upvotes: highlight.upvotes,
+        quote: highlight.quote,
+        url: highlight.url,
+        id: newDocRef.id
+      });
+}
+
+
+async function updateHighlight(highlight: Highlight) {
+    await setDoc( doc(highlightCollection, highlight.id), {
+        downvotes: highlight.downvotes,
+        upvotes: highlight.upvotes,
+        quote: highlight.quote,
+        url: highlight.url,
+        id: highlight.id
+      });
+}
+
+async function addPost(highlight: string,post: Post){
+    const newDocRef = doc(postCollection)
+    await setDoc(newDocRef, {
+        downvotes: post.downvotes,
+        upvotes: post.upvotes,
+        comment: post.comment,
+        sources: post.sources,
+        id: newDocRef.id
+      });
+}
+
+async function updatePost(post: Post){
+    await setDoc(doc(postCollection, post.id), {
+        downvotes: post.downvotes,
+        upvotes: post.upvotes,
+        comment: post.comment,
+        sources: post.sources,
+        id: post.id 
+          });
+}
+
+
+
+export { getHighlights, getHighlightsForUrl, getPosts,addPost,updatePost,updateHighlight,addHighlight,getPostsByHighlight }
