@@ -9,4 +9,4 @@ Note that Google Chrome needs to be in developer mode to allow unpacked extensio
 
 ## Development
 
-For development it is recommended to use `npm run dev` and view the extension popup like a normal website to be able to utilize the live reload features React offers. 
+For development it is recommended to use `npm run dev` and view the extension popup like a normal website to be able to utilize the live reload features React offers.
