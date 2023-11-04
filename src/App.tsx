@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import HighlightItem from 'components/HighlightItem'
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom'
 import HighlightList from 'components/HighlightList'
-import { getHighlightsForUrl } from 'utils/Firebase'
+import { getHighlightsForUrl, updateHighlight } from 'utils/Firebase'
 import { Highlight } from 'utils/Types'
 
 function App() {
@@ -26,9 +26,22 @@ function App() {
                         }),
                     )
                 })
-            },
+                },
         )
     }, [])
+
+    const voteHighlight = (highlight: Highlight, upvote: boolean) => {
+      upvote ? highlight.upvotes++ : highlight.downvotes++
+      updateHighlight(highlight).then( () => {
+      const newHighlights = highlights.map((i) => {
+          if (i.id === highlight.id){
+            return highlight
+          }
+          return i
+        })
+        setHighlights(newHighlights)
+    })
+    }
 
     return (
         <div className="App">
@@ -36,7 +49,7 @@ function App() {
                 <Routes>
                     <Route
                         index
-                        element={<HighlightList highlights={highlights} />}
+                        element={<HighlightList highlights={highlights} voteHighlight={voteHighlight} />}
                     ></Route>
                     <Route
                         path="/:id"
