@@ -8,6 +8,7 @@ export type Highlight = {
 
 export type Post = {
     id?: string
+    highlight: any
     comment: string
     sources: string[]
     upvotes: number

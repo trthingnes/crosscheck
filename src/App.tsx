@@ -11,7 +11,7 @@ function App() {
     const [highlights, setHighlights] = useState<Highlight[]>([])
 
     useEffect(() => {
-        chrome.tabs.query(
+       chrome.tabs.query(
             { active: true, currentWindow: true },
             function (tabs) {
                 // There should only be a single tab in this query, so select tabs[0]
