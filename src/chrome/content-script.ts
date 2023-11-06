@@ -1,4 +1,4 @@
-import { getHighlightsForUrl } from 'utils/Firebase'
+import { getHighlightsForUrl } from '../utils/Firebase'
 
 const url = window.location.href
 
