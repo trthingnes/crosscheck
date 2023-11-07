@@ -72,7 +72,7 @@ function HighlightsList(props: {
     return (
         <div>
             {props.highlights
-                .map((highlight: any, index: number) => {
+                .map((highlight: Highlight, index: number) => {
                     return (
                         <div key={highlight.id}>
                             <Link to={`/${highlight.id}`}>
