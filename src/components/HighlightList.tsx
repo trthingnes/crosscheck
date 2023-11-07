@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Highlight } from 'utils/Types'
 import { updateHighlight } from 'utils/Firebase'
-import { Button, Icon, Label } from 'semantic-ui-react'
+import { Button, Icon, Label, Card } from 'semantic-ui-react'
 
 function HighlightsList(props: {
   highlights: Highlight[]
@@ -29,7 +29,6 @@ function HighlightsList(props: {
   const upvoteHighlight = (
     highlight: Highlight,
     index: number,
-    upvote: boolean,
   ) => {
     highlight.upvotes++
     if (downvoted[index]) {
@@ -51,7 +50,6 @@ function HighlightsList(props: {
   const downvoteHighlight = (
     highlight: Highlight,
     index: number,
-    upvote: boolean,
   ) => {
     highlight.upvotes--
     if (upvoted[index]) {
@@ -76,18 +74,20 @@ function HighlightsList(props: {
         .map((highlight: any, index: number) => {
           return (
             <div key={highlight.id}>
+              <Card>
               <Link to={`/${highlight.id}`}>
                 {' '}
                 {highlight.quote}
               </Link>
-              <div>
+              <div >
                 <Button
+                  style={{"margin":"5px"}}
                   icon
                   color="green"
                   size="tiny"
                   disabled={upvoted[index]}
                   onClick={() =>
-                    upvoteHighlight(highlight, index, true)
+                    upvoteHighlight(highlight, index)
                   }
                 >
                   <Icon name="arrow up" />
@@ -97,6 +97,7 @@ function HighlightsList(props: {
                 </Label>
 
                 <Button
+                  style={{"margin":"5px"}}
                   icon
                   color="red"
                   size="tiny"
@@ -105,35 +106,36 @@ function HighlightsList(props: {
                     downvoteHighlight(
                       highlight,
                       index,
-                      false,
                     )
                   }
                 >
                   <Icon name="arrow down" />
                 </Button>
               </div>
+              </Card>
             </div>
           )
         })
         .filter((o: any, k: number) => k < showAmount)}
-      <button
-        className="ui button"
+        <div style={{width: '290px',padding:'10px'}}>
+      <Button
+        className="ui icon button"
         type="button"
         disabled={showAmount >= props.highlights.length}
         onClick={() => moreHighlights()}
       >
-        {' '}
-        More{' '}
-      </button>
-      <button
-        className="ui button"
+        <Icon name="angle double down" />
+      </Button>
+      <Button
+      
+        className="ui icon button"
         type="button"
         disabled={showAmount <= 3}
         onClick={() => lessHighlights()}
       >
-        {' '}
-        Less{' '}
-      </button>
+        <Icon  name="angle double up"  />
+      </Button>
+      </div>
     </div>
   )
 }
