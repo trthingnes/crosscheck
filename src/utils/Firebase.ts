@@ -10,7 +10,7 @@ import {
     QuerySnapshot,
     DocumentData,
 } from 'firebase/firestore'
-import { Highlight, Post } from 'utils/Types'
+import { Highlight, Post } from '../utils/Types'
 import {
     FIREBASE_API_KEY,
     FIREBASE_APP_ID,
@@ -20,7 +20,7 @@ import {
     FIREBASE_PROJECT_ID,
     FIREBASE_SENDER_ID,
     FIREBASE_STORAGE_BUCKET,
-} from 'utils/Env'
+} from '../utils/Env'
 
 initializeApp({
     apiKey: FIREBASE_API_KEY,
