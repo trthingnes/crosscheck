@@ -3,9 +3,11 @@ import './App.css'
 import { useState, useEffect } from 'react'
 import HighlightItem from './components/HighlightItem'
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom'
-import HighlightList from './components/HighlightList'
-import { getHighlightsForUrl } from './utils/Firebase'
-import { Highlight } from './utils/Types'
+import HighlightList from 'components/HighlightList'
+import { getHighlightsForUrl } from 'utils/Firebase'
+import { Highlight } from 'utils/Types'
+import {Header, Icon} from 'semantic-ui-react'
+
 
 function App() {
     const [highlights, setHighlights] = useState<Highlight[]>([])
@@ -32,6 +34,10 @@ function App() {
 
     return (
         <div className="App">
+            <Header style={{"width":"290px", "paddingTop":"10px", "color":"green"}}>
+            <Icon name="check" />
+                CrossCheck
+            </Header>
             <Router>
                 <Routes>
                     <Route
