@@ -1,0 +1,14 @@
+.commentForm {
+    display: flex;
+    flex-direction: column;
+    align-items:flex-start;
+    justify-content:space-between;
+  }
+
+.buttonBack{
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    margin-top: 10px;
+    padding-right: 50px;
+}

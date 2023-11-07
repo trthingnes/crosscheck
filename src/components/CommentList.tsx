@@ -1,12 +1,14 @@
 
 import React, { useState } from 'react';
-import {  Post } from '../utils/Types'
-import { List } from 'semantic-ui-react';
+import {  Highlight, Post } from '../utils/Types'
+import { Header, Label, List } from 'semantic-ui-react';
 import { updatePost } from '../utils/Firebase';
 import Comment from './Comment';
-
+import './componentsCss/CommentForm.css'
+import CommentForm from './CommentForm';
 
 function CommentList(props: {
+    quote: any
     posts: Post[]
     setPosts: any
 }) {
@@ -80,15 +82,13 @@ function CommentList(props: {
 
 return(
     
-    <div>
+    <div className='commentForm'>
         
             <div style={{paddingLeft:'10px', paddingTop:'10px', width: 'auto', height:'400px', overflowY: 'scroll'}}>
                     {props.posts
                         .map((comment: Post, index: number) => {
                             return (
-                               
-                                <div key={comment.id}>
-                                     {props.posts.length}
+                               <div key={comment.id}>
                                     <Comment comment={comment} index={index} vote={voteFunctions} />
                                  </div>
                                 
@@ -97,7 +97,7 @@ return(
                         .filter((o: any, k: number) => k < showAmount)}
                 </div>
 
-        
+      
         
     </div>
 )
