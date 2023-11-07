@@ -5,7 +5,6 @@ import HighlightItem from './components/HighlightItem'
 import HighlightList from './components/HighlightList'
 import { getHighlightsForUrl } from './utils/Firebase'
 import { Highlight } from './utils/Types'
-import { IS_DEV } from './utils/Constants'
 
 import 'semantic-ui-css/semantic.min.css'
 import './App.css'
@@ -16,7 +15,7 @@ function App() {
     useEffect(() => {
         let url = 'localhost'
 
-        if (!IS_DEV) {
+        if (chrome.tabs) {
             chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
                 url = tabs[0].url || ''
             })

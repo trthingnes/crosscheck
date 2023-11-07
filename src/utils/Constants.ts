@@ -9,6 +9,7 @@ export const IS_DEV =
 export const OFFLINE_MODE = IS_DEV
 
 export const SAMPLE_HIGHLIGHT: Highlight = {
+    id: 'sample-highlight',
     url: 'localhost',
     quote: 'This is an example quote',
     upvotes: 10,
@@ -16,6 +17,7 @@ export const SAMPLE_HIGHLIGHT: Highlight = {
 }
 
 export const SAMPLE_POST: Post = {
+    id: 'sample-post',
     highlight: SAMPLE_HIGHLIGHT,
     comment: 'This is an example comment',
     sources: ['http://example.com'],
