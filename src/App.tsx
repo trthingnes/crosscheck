@@ -13,20 +13,28 @@ function App() {
     const [highlights, setHighlights] = useState<Highlight[]>([])
 
     useEffect(() => {
-        let url = 'localhost'
-
-        if (chrome.tabs) {
-            chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-                url = tabs[0].url || ''
-            })
+        async function getTabUrl() {
+            if (chrome.tabs) {
+                const tab = await chrome.tabs.query({
+                    active: true,
+                    currentWindow: true,
+                })
+                return tab[0]?.url || 'unknown'
+            } else {
+                return 'localhost'
+            }
         }
 
-        getHighlightsForUrl(url).then((highlights) => {
-            setHighlights(
-                highlights.sort((a, b) => {
-                    return b.upvotes - b.downvotes - (a.upvotes - a.downvotes)
-                }),
-            )
+        getTabUrl().then((url) => {
+            getHighlightsForUrl(url).then((highlights) => {
+                setHighlights(
+                    highlights.sort((a, b) => {
+                        return (
+                            b.upvotes - b.downvotes - (a.upvotes - a.downvotes)
+                        )
+                    }),
+                )
+            })
         })
     }, [])
 
