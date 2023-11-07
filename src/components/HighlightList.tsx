@@ -61,7 +61,7 @@ function HighlightsList({
                 .map((highlight: Highlight, index: number) => {
                     return (
                         <div key={index}>
-                            <Link to={highlight.id}>{highlight.quote}</Link>
+                            <Link to={highlight.id || ''}>{highlight.quote}</Link>
                             <div id="voting-section">
                                 <Button.Group>
                                     <Button as="div" labelPosition="right">

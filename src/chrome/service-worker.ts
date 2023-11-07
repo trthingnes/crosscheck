@@ -1,17 +1,15 @@
-import {
-    SELECTION_SUBMIT_CONTEXT_MENU_MESSAGE,
-    SELECTION_SUBMIT_SUCCESS_NOTIFICATION_MESSAGE,
-    SELECTION_SUBMIT_SUCCESS_NOTIFICATION_TITLE,
-} from '../utils/Constants'
+import { HIGHLIGHT_MIN_SIZE } from '../utils/Constants'
+import { addHighlight } from '../utils/Firebase'
 
 const contextMenuId = 'selection-submit'
+const contextMenuTitle = 'Submit highlighted text for discussion'
 const contextMenuContexts: chrome.contextMenus.ContextType[] = ['selection']
 
 chrome.runtime.onInstalled.addListener(function () {
     chrome.contextMenus.create({
-        title: SELECTION_SUBMIT_CONTEXT_MENU_MESSAGE,
-        contexts: contextMenuContexts,
         id: contextMenuId,
+        title: contextMenuTitle,
+        contexts: contextMenuContexts,
     })
 })
 
@@ -22,16 +20,38 @@ function handleContextMenuClick(data: chrome.contextMenus.OnClickData) {
         const url = data.frameUrl
         const selection = data.selectionText
 
-        // TODO: Do something with url and selection here, and give the user a success/failure notification.
-        console.log(url, selection)
+        if (!url) {
+            chrome.notifications.create({
+                type: 'basic',
+                iconUrl: '../../icons/icon128.png',
+                title: 'Could not submit selection for discussion',
+                message:
+                    'We could not read the URL of the website you are visiting right now. Please reload and try again.',
+            })
+        } else if (!selection || selection.length < HIGHLIGHT_MIN_SIZE) {
+            chrome.notifications.create({
+                type: 'basic',
+                iconUrl: '../../icons/icon128.png',
+                title: 'Could not submit selection for discussion',
+                message: `We could not submit your current selection, please make sure you have marked more than ${HIGHLIGHT_MIN_SIZE} characters.`,
+            })
+        } else {
+            addHighlight({
+                url: url,
+                quote: selection,
+                upvotes: 0,
+                downvotes: 0,
+            })
 
-        // ! Opening the extension popup is not possible programatically. It seems like Google designed it that way.
-        chrome.notifications.create({
-            type: 'basic',
-            iconUrl: '../../icons/icon128.png',
-            title: SELECTION_SUBMIT_SUCCESS_NOTIFICATION_TITLE,
-            message: SELECTION_SUBMIT_SUCCESS_NOTIFICATION_MESSAGE,
-        })
+            // ! Opening the extension popup is not possible programatically. It seems like Google designed it that way.
+            chrome.notifications.create({
+                type: 'basic',
+                iconUrl: '../../icons/icon128.png',
+                title: 'Selection submitted for discussion',
+                message:
+                    'Your submission should be visible in the extension window in the top right corner of the browser.',
+            })
+        }
     }
 }
 
