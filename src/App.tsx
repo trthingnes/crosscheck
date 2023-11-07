@@ -34,7 +34,7 @@ function App() {
 
     return (
         <div className="App">
-            <Header style={{"width":"290px", "paddingTop":"10px", "color":"green"}}>
+            <Header style={{"width":"300px", "paddingTop":"10px", "color":"green"}}>
             <Icon name="check" />
                 CrossCheck
             </Header>

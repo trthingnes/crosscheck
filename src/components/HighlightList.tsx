@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Highlight } from '../utils/Types'
 import { updateHighlight } from '../utils/Firebase'
 import { Button, Icon, Label } from 'semantic-ui-react'
+import HighlightQuote from './HighlightQuote'
 
 function HighlightsList(props: {
     highlights: Highlight[]
@@ -69,55 +70,25 @@ function HighlightsList(props: {
         })
     }
 
+    const voteFunctions = {upvoteHighlight, downvoteHighlight, upvoted, downvoted}
+
     return (
         <div>
-            {props.highlights
-                .map((highlight: any, index: number) => {
-                    return (
-                        <div key={highlight.id}>
-                            <Link to={`/${highlight.id}`}>
-                                {' '}
-                                {highlight.quote}
-                            </Link>
-                            <div>
-                                <Button
-                                    icon
-                                    color="green"
-                                    size="tiny"
-                                    disabled={upvoted[index]}
-                                    onClick={() =>
-                                        upvoteHighlight(highlight, index, true)
-                                    }
-                                >
-                                    <Icon name="arrow up" />
-                                </Button>
-                                <Label>
-                                    {highlight.upvotes - highlight.downvotes}
-                                </Label>
-
-                                <Button
-                                    icon
-                                    color="red"
-                                    size="tiny"
-                                    disabled={downvoted[index]}
-                                    onClick={() =>
-                                        downvoteHighlight(
-                                            highlight,
-                                            index,
-                                            false,
-                                        )
-                                    }
-                                >
-                                    <Icon name="arrow down" />
-                                </Button>
+            <div style={{paddingLeft:'10px', paddingTop:'10px', width: '450px', height:'400px', overflowY: 'scroll'}}>
+                {props.highlights
+                    .map((highlight: any, index: number) => {
+                        return (
+                            <div key={highlight.id}>
+                                <HighlightQuote quote={highlight} index={index} link={true} vote = {voteFunctions}/>
                             </div>
-                        </div>
-                    )
-                })
-                .filter((o: any, k: number) => k < showAmount)}
+                        )
+                    })
+                    .filter((o: any, k: number) => k < showAmount)}
+            </div>
+
+            <div style={{paddingTop:'10px', paddingBottom:'10px'}}>
             <button
-                className="ui button"
-                type="button"
+                className="ui button" type="button"
                 disabled={showAmount >= props.highlights.length}
                 onClick={() => moreHighlights()}
             >
@@ -133,6 +104,7 @@ function HighlightsList(props: {
                 {' '}
                 Less{' '}
             </button>
+            </div>
         </div>
     )
 }
