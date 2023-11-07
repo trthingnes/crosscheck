@@ -104,7 +104,7 @@ async function addPost(highlight: string, post: Post) {
     })
 }
 
-async function updatePost(highlight: string, post: Post) {
+async function updatePost(post: Post) {
     await setDoc(doc(postCollection, post.id), {
         downvotes: post.downvotes,
         upvotes: post.upvotes,

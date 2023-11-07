@@ -70,10 +70,16 @@ function HighlightsList(props: {
         })
     }
 
-    const voteFunctions = {upvoteHighlight, downvoteHighlight, upvoted, downvoted}
+    const voteFunctions = {
+        up: upvoteHighlight,
+        down: downvoteHighlight, 
+        upvoted: upvoted, 
+        downvoted: downvoted
+    }
 
     return (
         <div>
+         
             <div style={{paddingLeft:'10px', paddingTop:'10px', width: '450px', height:'400px', overflowY: 'scroll'}}>
                 {props.highlights
                     .map((highlight: any, index: number) => {
@@ -85,7 +91,7 @@ function HighlightsList(props: {
                     })
                     .filter((o: any, k: number) => k < showAmount)}
             </div>
-
+        
             <div style={{paddingTop:'10px', paddingBottom:'10px'}}>
             <button
                 className="ui button" type="button"

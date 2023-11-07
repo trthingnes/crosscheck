@@ -14,3 +14,5 @@ export type Post = {
     upvotes: number
     downvotes: number
 }
+
+

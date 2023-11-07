@@ -13,8 +13,7 @@ const CommentForm = () => (
         width: 350,
         height: 350,
         backgroundColor: 'grey',}}>
-        
-        <CrossCommentList />        
+               
         <Input size='large' action='Submit' placeholder='Add comment...' style={{  float:'left', paddingTop: '10px' }} />
 
     </div>
