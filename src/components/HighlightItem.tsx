@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { Highlight, Post } from '../utils/Types'
-import { getPostsByHighlight } from '../utils/Firebase'
+import { getPostsByHighlightId } from '../utils/Firebase'
 
 function HighlightItem({ highlights }: { highlights: Highlight[] }) {
     const { id } = useParams()
@@ -10,7 +10,7 @@ function HighlightItem({ highlights }: { highlights: Highlight[] }) {
 
     useEffect(() => {
         setHighlight(highlights.find((i: Highlight) => i.id === id))
-        getPostsByHighlight(id ? id : '').then((res) => {
+        getPostsByHighlightId(id ? id : '').then((res) => {
             setPosts(res)
         })
     }, [highlights, id])
