@@ -1,5 +1,5 @@
 export type Highlight = {
-    id?: string
+    id: string
     url: string
     quote: string
     upvotes: number
@@ -7,7 +7,7 @@ export type Highlight = {
 }
 
 export type Post = {
-    id?: string
+    id: string
     highlight: Highlight
     comment: string
     sources: string[]

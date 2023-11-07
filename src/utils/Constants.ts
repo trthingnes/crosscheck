@@ -25,6 +25,7 @@ export const SAMPLE_POST: Post = {
     downvotes: 1,
 }
 
+export const HIGHLIGHT_BATCH_SIZE = 3
 export const SELECTION_SUBMIT_CONTEXT_MENU_MESSAGE =
     'Submit highlighted text for discussion'
 export const SELECTION_SUBMIT_SUCCESS_NOTIFICATION_TITLE =
