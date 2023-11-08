@@ -9,6 +9,8 @@ import {
     where,
     QuerySnapshot,
     DocumentData,
+    Timestamp ,
+    getCountFromServer
 } from 'firebase/firestore'
 import {
     FIREBASE_API_KEY,
@@ -55,6 +57,17 @@ async function getHighlightsForUrl(url?: string) {
     ).then(getDocumentsFromSnapshot)) as Highlight[]
 }
 
+async function getTotalLast7Days(){
+        if (OFFLINE_MODE) return 1
+        const currentTime = new Date()
+        const timeCutoff = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate()-7)
+        const highlightsQuery = query(highlightCollection, where("timestamp",">",timeCutoff))
+        const highlightsSnapshot = await getCountFromServer(highlightsQuery);
+        const postsQuery = query(postCollection, where("timestamp",">",timeCutoff))
+        const postsSnapshot = await getCountFromServer(postsQuery)
+        return highlightsSnapshot.data().count + postsSnapshot.data().count
+}
+
 async function getPosts() {
     if (OFFLINE_MODE) return [SAMPLE_POST]
 
@@ -89,6 +102,7 @@ async function addHighlight(highlight: Highlight) {
     const emptyRef = doc(highlightCollection)
     await setDoc(emptyRef, {
         id: emptyRef.id,
+        timestamp: Timestamp.fromDate(new Date()),
         url: highlight.url,
         quote: highlight.quote,
         upvotes: highlight.upvotes,
@@ -101,6 +115,7 @@ async function updateHighlight(highlight: Highlight) {
 
     await setDoc(doc(highlightCollection, highlight.id), {
         id: highlight.id,
+        timestamp: highlight.timestamp,
         url: highlight.url,
         quote: highlight.quote,
         upvotes: highlight.upvotes,
@@ -116,6 +131,7 @@ async function addPostToHighlight(highlightId: string, post: Post) {
     await setDoc(emptyRef, {
         id: emptyRef.id,
         highlight: highlightRef,
+        timestamp: Timestamp.fromDate(new Date()),
         comment: post.comment,
         sources: post.sources,
         upvotes: post.upvotes,
@@ -129,6 +145,7 @@ async function updatePost(post: Post) {
     await setDoc(doc(postCollection, post.id), {
         id: post.id,
         highlight: post.highlight,
+        timestamp: post.timestamp,
         comment: post.comment,
         sources: post.sources,
         upvotes: post.upvotes,
@@ -145,4 +162,5 @@ export {
     updateHighlight,
     addHighlight,
     getPostsByHighlightId,
+    getTotalLast7Days
 }

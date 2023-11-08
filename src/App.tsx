@@ -4,7 +4,7 @@ import { Header, Icon } from 'semantic-ui-react'
 import HighlightItem from './components/HighlightItem'
 import HighlightList from './components/HighlightList'
 import { Highlight } from './utils/Types'
-import { getHighlightsForUrl } from './utils/Firebase'
+import { getHighlightsForUrl,getTotalLast7Days  } from './utils/Firebase'
 
 import 'semantic-ui-css/semantic.min.css'
 import './App.css'
@@ -12,6 +12,7 @@ import './App.css'
 function App() {
     const [highlights, setHighlights] = useState<Highlight[]>([])
     const [url, setUrl] = useState("")
+    const [totalContributions, setTotalContributions] = useState(0)
 
     useEffect(() => {
         async function getTabUrl() {
@@ -38,6 +39,9 @@ function App() {
                 )
             })
         })
+        getTotalLast7Days().then((res)=>{
+            setTotalContributions(res)
+        })
     }, [])
    
 
@@ -47,7 +51,7 @@ function App() {
                 style={{ width: '290px', paddingTop: '10px', color: 'green' }}
             >
                 <Icon name="check" />
-                CrossCheck
+                CrossCheck {totalContributions}
             </Header>
             <Router>
                 <Routes>
