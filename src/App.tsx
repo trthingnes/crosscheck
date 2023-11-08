@@ -11,6 +11,7 @@ import './App.css'
 
 function App() {
     const [highlights, setHighlights] = useState<Highlight[]>([])
+    const [url, setUrl] = useState("")
 
     useEffect(() => {
         async function getTabUrl() {
@@ -26,6 +27,7 @@ function App() {
         }
 
         getTabUrl().then((url) => {
+            setUrl(url)
             getHighlightsForUrl(url).then((highlights) => {
                 setHighlights(
                     highlights.sort((a, b) => {
@@ -55,6 +57,7 @@ function App() {
                             <HighlightList
                                 highlights={highlights}
                                 setHighlights={setHighlights}
+                                url={url}
                             />
                         }
                     ></Route>
