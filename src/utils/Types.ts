@@ -4,6 +4,7 @@ export type Highlight = {
     quote: string
     upvotes: number
     downvotes: number
+    timestamp?: Date
 }
 
 export type Post = {
@@ -13,6 +14,7 @@ export type Post = {
     sources: string[]
     upvotes: number
     downvotes: number
+    timestamp?: Date
 }
 
 export type Vote = {

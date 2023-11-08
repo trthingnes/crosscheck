@@ -1,11 +1,19 @@
+import { useState } from 'react'
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom'
 import { Header, Icon } from 'semantic-ui-react'
+
 import { HighlightsPage } from './routes/HighlightsPage'
 import { PostsPage } from './routes/PostsPage'
+import { getTotalLast7Days } from './utils/Firebase'
 
 import 'semantic-ui-css/semantic.min.css'
 
 function App() {
+    const [totalContributions, setTotalContributions] = useState(0)
+    getTotalLast7Days().then((res) => {
+        setTotalContributions(res)
+    })
+
     return (
         <div className="App">
             <Header
@@ -15,7 +23,7 @@ function App() {
                 style={{ marginTop: '1rem' }}
             >
                 <Icon name="check" />
-                CrossCheck
+                CrossCheck {totalContributions}
             </Header>
             <Router>
                 <Routes>
