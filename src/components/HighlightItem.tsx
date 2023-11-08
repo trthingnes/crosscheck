@@ -31,7 +31,7 @@ function HighlightItem({ highlights }: { highlights: Highlight[] }) {
                     </Label>
                 </div>
                 <CommentList quote={highlight?.quote} posts={posts} setPosts={setPosts} />
-                <CommentForm/>
+                <CommentForm />
             </div>
             <div className='buttonBack'>
                 <Button >
