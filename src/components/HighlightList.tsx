@@ -1,73 +1,59 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Highlight } from '../utils/Types'
-import { updateHighlight } from '../utils/Firebase'
 import { Button, Icon, Label } from 'semantic-ui-react'
+import { updateHighlight } from '../utils/Firebase'
+import { Highlight } from '../utils/Types'
+import { HIGHLIGHT_BATCH_SIZE } from '../utils/Constants'
 import HighlightQuote from './HighlightQuote'
 
-function HighlightsList(props: {
+function HighlightsList({
+    highlights,
+    setHighlights,
+}: {
     highlights: Highlight[]
-    setHighlights: any
+    setHighlights: (highlights: Highlight[]) => void
 }) {
-    const [showAmount, setShowAmount] = useState(3)
-    const [upvoted, setUpvoted] = useState(
-        Array(props.highlights.length).fill(false),
+    const [showAmount, setShowAmount] = useState(HIGHLIGHT_BATCH_SIZE)
+    const [isUpvoted, setIsUpvoted] = useState(
+        Array(highlights.length).fill(false),
     )
-    const [downvoted, setDownvoted] = useState(
-        Array(props.highlights.length).fill(false),
+    const [isDownvoted, setIsDownvoted] = useState(
+        Array(highlights.length).fill(false),
     )
 
-    const moreHighlights = () => {
-        const len = props.highlights.length
-        setShowAmount(Math.min(len, showAmount + 3))
+    const updateHighlightInState = (highlight: Highlight) => {
+        const updatedHighlights = [...highlights]
+        updatedHighlights[highlights.findIndex((h) => h.id === highlight.id)] =
+            highlight
+        setHighlights(updatedHighlights)
     }
 
-    const lessHighlights = () => {
-        setShowAmount(Math.max(3, showAmount - 3))
-    }
-
-    const upvoteHighlight = (
-        highlight: Highlight,
-        index: number,
-        upvote: boolean,
-    ) => {
+    const upvoteHighlight = (highlight: Highlight, index: number) => {
         highlight.upvotes++
-        if (downvoted[index]) {
-            const newDownvoted = [...downvoted]
+        if (isDownvoted[index]) {
+            const newDownvoted = [...isDownvoted]
             newDownvoted[index] = false
-            setDownvoted(newDownvoted)
+            setIsDownvoted(newDownvoted)
         } else {
-            const newUpvoted = [...upvoted]
+            const newUpvoted = [...isUpvoted]
             newUpvoted[index] = true
-            setUpvoted(newUpvoted)
+            setIsUpvoted(newUpvoted)
         }
-        updateHighlight(highlight).then(() => {
-            const newHighlights = [...props.highlights]
-            newHighlights[index] = highlight
-            props.setHighlights(newHighlights)
-        })
+        updateHighlight(highlight).then(() => updateHighlightInState(highlight))
     }
 
-    const downvoteHighlight = (
-        highlight: Highlight,
-        index: number,
-        upvote: boolean,
-    ) => {
+    const downvoteHighlight = (highlight: Highlight, index: number) => {
         highlight.upvotes--
-        if (upvoted[index]) {
-            const newUpvoted = [...upvoted]
+        if (isUpvoted[index]) {
+            const newUpvoted = [...isUpvoted]
             newUpvoted[index] = false
-            setUpvoted(newUpvoted)
+            setIsUpvoted(newUpvoted)
         } else {
-            const newDownvoted = [...downvoted]
+            const newDownvoted = [...isDownvoted]
             newDownvoted[index] = true
-            setDownvoted(newDownvoted)
+            setIsDownvoted(newDownvoted)
         }
-        updateHighlight(highlight).then(() => {
-            const newHighlights = [...props.highlights]
-            newHighlights[index] = highlight
-            props.setHighlights(newHighlights)
-        })
+        updateHighlight(highlight).then(() => updateHighlightInState(highlight))
     }
 
     const voteFunctions = {
@@ -94,21 +80,36 @@ function HighlightsList(props: {
         
             <div style={{paddingTop:'10px', paddingBottom:'10px'}}>
             <button
-                className="ui button" type="button"
-                disabled={showAmount >= props.highlights.length}
-                onClick={() => moreHighlights()}
+                id="show-more-button"
+                className="ui button"
+                type="button"
+                disabled={showAmount >= highlights.length}
+                onClick={() =>
+                    setShowAmount(
+                        Math.min(
+                            highlights.length,
+                            showAmount + HIGHLIGHT_BATCH_SIZE,
+                        ),
+                    )
+                }
             >
-                {' '}
-                More{' '}
+                More
             </button>
             <button
+                id="show-less-button"
                 className="ui button"
                 type="button"
                 disabled={showAmount <= 3}
-                onClick={() => lessHighlights()}
+                onClick={() =>
+                    setShowAmount(
+                        Math.max(
+                            HIGHLIGHT_BATCH_SIZE,
+                            showAmount - HIGHLIGHT_BATCH_SIZE,
+                        ),
+                    )
+                }
             >
-                {' '}
-                Less{' '}
+                Less
             </button>
             </div>
         </div>

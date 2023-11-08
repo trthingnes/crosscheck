@@ -10,7 +10,6 @@ import {
     QuerySnapshot,
     DocumentData,
 } from 'firebase/firestore'
-import { Highlight, Post } from '../utils/Types'
 import {
     FIREBASE_API_KEY,
     FIREBASE_APP_ID,
@@ -20,7 +19,9 @@ import {
     FIREBASE_PROJECT_ID,
     FIREBASE_SENDER_ID,
     FIREBASE_STORAGE_BUCKET,
-} from '../utils/Env'
+} from './Env'
+import { Highlight, Post } from './Types'
+import { OFFLINE_MODE, SAMPLE_HIGHLIGHT, SAMPLE_POST } from './Constants'
 
 initializeApp({
     apiKey: FIREBASE_API_KEY,
@@ -37,6 +38,42 @@ const firestore = getFirestore()
 const highlightCollection = collection(firestore, 'Highlight')
 const postCollection = collection(firestore, 'Post')
 
+async function getHighlights() {
+    if (OFFLINE_MODE) return [SAMPLE_HIGHLIGHT]
+
+    return (await getDocs(highlightCollection).then(
+        getDocumentsFromSnapshot,
+    )) as Highlight[]
+}
+
+async function getHighlightsForUrl(url?: string) {
+    if (OFFLINE_MODE) return [SAMPLE_HIGHLIGHT]
+    if (!url) return []
+
+    return (await getDocs(
+        query(highlightCollection, where('url', '==', url)),
+    ).then(getDocumentsFromSnapshot)) as Highlight[]
+}
+
+async function getPosts() {
+    if (OFFLINE_MODE) return [SAMPLE_POST]
+
+    return (await getDocs(postCollection).then(
+        getDocumentsFromSnapshot,
+    )) as Post[]
+}
+
+async function getPostsByHighlightId(highlightId: string) {
+    if (OFFLINE_MODE) return [SAMPLE_POST]
+
+    return (await getDocs(
+        query(
+            postCollection,
+            where('highlight', '==', doc(highlightCollection, highlightId)),
+        ),
+    ).then(getDocumentsFromSnapshot)) as Post[]
+}
+
 /**
  * Unpacks response into list of documents
  * @param snapshot QuerySnapshot from Firestore
@@ -46,72 +83,56 @@ function getDocumentsFromSnapshot(snapshot: QuerySnapshot<any, DocumentData>) {
     return snapshot.docs.map((doc) => doc.data())
 }
 
-async function getHighlights() {
-    return (await getDocs(highlightCollection).then(
-        getDocumentsFromSnapshot,
-    )) as Highlight[]
-}
-
-async function getHighlightsForUrl(url: string | undefined) {
-    if (!url) return []
-    const q = query(highlightCollection, where('url', '==', url))
-    return (await getDocs(q).then(getDocumentsFromSnapshot)) as Highlight[]
-}
-
-async function getPosts() {
-    return (await getDocs(postCollection).then(
-        getDocumentsFromSnapshot,
-    )) as Post[]
-}
-
-async function getPostsByHighlight(highlight: string) {
-    const docRef = doc(highlightCollection, highlight)
-    const q = query(postCollection, where('highlight', '==', docRef))
-    return (await getDocs(q).then(getDocumentsFromSnapshot)) as Post[]
-}
-
 async function addHighlight(highlight: Highlight) {
-    const newDocRef = doc(highlightCollection)
-    await setDoc(newDocRef, {
-        downvotes: highlight.downvotes,
-        upvotes: highlight.upvotes,
-        quote: highlight.quote,
+    if (OFFLINE_MODE) return
+
+    const emptyRef = doc(highlightCollection)
+    await setDoc(emptyRef, {
+        id: emptyRef.id,
         url: highlight.url,
-        id: newDocRef.id,
+        quote: highlight.quote,
+        upvotes: highlight.upvotes,
+        downvotes: highlight.downvotes,
     })
 }
 
 async function updateHighlight(highlight: Highlight) {
+    if (OFFLINE_MODE) return
+
     await setDoc(doc(highlightCollection, highlight.id), {
-        downvotes: highlight.downvotes,
-        upvotes: highlight.upvotes,
-        quote: highlight.quote,
-        url: highlight.url,
         id: highlight.id,
+        url: highlight.url,
+        quote: highlight.quote,
+        upvotes: highlight.upvotes,
+        downvotes: highlight.downvotes,
     })
 }
 
-async function addPost(highlight: string, post: Post) {
-    const docRef = doc(highlightCollection, highlight)
-    const newDocRef = doc(postCollection)
-    await setDoc(newDocRef, {
-        downvotes: post.downvotes,
-        upvotes: post.upvotes,
+async function addPostToHighlight(highlightId: string, post: Post) {
+    if (OFFLINE_MODE) return
+
+    const highlightRef = doc(highlightCollection, highlightId)
+    const emptyRef = doc(postCollection)
+    await setDoc(emptyRef, {
+        id: emptyRef.id,
+        highlight: highlightRef,
         comment: post.comment,
-        highlight: docRef,
         sources: post.sources,
-        id: newDocRef.id,
+        upvotes: post.upvotes,
+        downvotes: post.downvotes,
     })
 }
 
 async function updatePost(post: Post) {
+    if (OFFLINE_MODE) return
+
     await setDoc(doc(postCollection, post.id), {
-        downvotes: post.downvotes,
-        upvotes: post.upvotes,
-        comment: post.comment,
-        highlight: post.highlight,
-        sources: post.sources,
         id: post.id,
+        highlight: post.highlight,
+        comment: post.comment,
+        sources: post.sources,
+        upvotes: post.upvotes,
+        downvotes: post.downvotes,
     })
 }
 
@@ -119,9 +140,9 @@ export {
     getHighlights,
     getHighlightsForUrl,
     getPosts,
-    addPost,
+    addPostToHighlight,
     updatePost,
     updateHighlight,
     addHighlight,
-    getPostsByHighlight,
+    getPostsByHighlightId,
 }

@@ -1,28 +1,50 @@
+import { useState, useEffect } from 'react'
+import { MemoryRouter as Router, Routes, Route } from 'react-router-dom'
+import { Header, Icon } from 'semantic-ui-react'
+import HighlightItem from './components/HighlightItem'
+import HighlightList from './components/HighlightList'
+import { Highlight } from './utils/Types'
+import { getHighlights, getHighlightsForUrl } from './utils/Firebase'
+
 import 'semantic-ui-css/semantic.min.css'
 import './App.css'
-import { useState, useEffect } from 'react'
-import HighlightItem from './components/HighlightItem'
-import { MemoryRouter as Router, Routes, Route } from 'react-router-dom'
-import HighlightList from './components/HighlightList'
-import { getHighlights, getHighlightsForUrl } from './utils/Firebase'
-import { Highlight } from './utils/Types'
-import {Header, Icon} from 'semantic-ui-react'
-
 
 function App() {
     const [highlights, setHighlights] = useState<Highlight[]>([])
 
     useEffect(() => {
-        getHighlights().then((highlights) => {
-            setHighlights(highlights)
+        async function getTabUrl() {
+            if (chrome.tabs) {
+                const tab = await chrome.tabs.query({
+                    active: true,
+                    currentWindow: true,
+                })
+                return tab[0]?.url || 'unknown'
+            } else {
+                return 'localhost'
+            }
+        }
+
+        getTabUrl().then((url) => {
+            getHighlightsForUrl(url).then((highlights) => {
+                setHighlights(
+                    highlights.sort((a, b) => {
+                        return (
+                            b.upvotes - b.downvotes - (a.upvotes - a.downvotes)
+                        )
+                    }),
+                )
+            })
         })
     }, [])
    
 
     return (
         <div className="App">
-            <Header style={{"width":"300px", "paddingTop":"10px", "color":"green"}}>
-            <Icon name="check" />
+            <Header
+                style={{ width: '290px', paddingTop: '10px', color: 'green' }}
+            >
+                <Icon name="check" />
                 CrossCheck
             </Header>
             <Router>
