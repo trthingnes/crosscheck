@@ -15,4 +15,12 @@ export type Post = {
     downvotes: number
 }
 
+export type Vote = {
+    id: string
+    type: VoteType
+}
 
+export enum VoteType {
+    'Upvote',
+    'Downvote',
+}

@@ -25,5 +25,5 @@ export const SAMPLE_POST: Post = {
     downvotes: 1,
 }
 
-export const HIGHLIGHT_BATCH_SIZE = 3
+export const DEFAULT_SHOW_COUNT = 3
 export const HIGHLIGHT_MIN_SIZE = 5
