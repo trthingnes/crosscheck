@@ -3,8 +3,8 @@ import { MemoryRouter as Router, Routes, Route } from 'react-router-dom'
 import { Header, Icon } from 'semantic-ui-react'
 import HighlightItem from './components/HighlightItem'
 import HighlightList from './components/HighlightList'
-import { getHighlightsForUrl } from './utils/Firebase'
 import { Highlight } from './utils/Types'
+import { getHighlightsForUrl } from './utils/Firebase'
 
 import 'semantic-ui-css/semantic.min.css'
 import './App.css'
@@ -37,6 +37,7 @@ function App() {
             })
         })
     }, [])
+   
 
     return (
         <div className="App">
