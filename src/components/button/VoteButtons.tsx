@@ -2,10 +2,9 @@ import { createContext, useContext } from 'react'
 import { Vote, VoteType } from '../../utils/Types'
 import { Button, Icon, Label } from 'semantic-ui-react'
 
-export const VotingContext = createContext<[Vote[], (v: Vote[]) => void]>([
-    [],
-    () => {},
-])
+export const VotingContext = createContext<
+    [Vote[], (v: Vote[]) => void, (id: string, upvote: boolean) => void]
+>([[], () => {}, () => {}])
 
 export function VoteButtons({
     documentId,
@@ -16,7 +15,7 @@ export function VoteButtons({
     documentUpvotes: number
     documentDownvotes: number
 }) {
-    const [votes, setVotes] = useContext(VotingContext)
+    const [votes, setVotes, persistVote] = useContext(VotingContext)
 
     function changeVote(upvote: boolean) {
         const changeFrom = upvote ? VoteType.Downvote : VoteType.Upvote
@@ -35,6 +34,7 @@ export function VoteButtons({
         }
 
         setVotes(newVotes)
+        persistVote(documentId, upvote)
     }
 
     return (

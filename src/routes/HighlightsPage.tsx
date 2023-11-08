@@ -2,10 +2,10 @@ import { Container, Grid } from 'semantic-ui-react'
 import { useEffect, useState } from 'react'
 import { HighlightElement } from '../components/HighlightElement'
 import { ShowMoreLessButtons } from '../components/button/ShowMoreLessButtons'
+import { VotingContext } from '../components/button/VoteButtons'
 import { Highlight, Vote } from '../utils/Types'
 import { DEFAULT_SHOW_COUNT } from '../utils/Constants'
-import { getHighlightsForUrl } from '../utils/Firebase'
-import { VotingContext } from '../components/button/VoteButtons'
+import { getHighlightsForUrl, updateHighlight } from '../utils/Firebase'
 
 export function HighlightsPage() {
     const [url, setUrl] = useState('')
@@ -44,7 +44,6 @@ export function HighlightsPage() {
     // Fetch votes from local storage when the loaded url changes
     useEffect(() => {
         const votesJson = localStorage.getItem(url)
-
         if (votesJson) {
             setVotes(JSON.parse(votesJson))
         }
@@ -56,9 +55,22 @@ export function HighlightsPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [votes])
 
+    function persistVote(highlightId: string, upvote: boolean) {
+        const highlight = highlights.find((h) => h.id === highlightId)
+
+        if (highlight) {
+            if (upvote) {
+                highlight.upvotes++
+            } else if (!upvote) {
+                highlight.downvotes++
+            }
+            updateHighlight(highlight)
+        }
+    }
+
     return (
         <Grid columns={1} padded>
-            <VotingContext.Provider value={[votes, setVotes]}>
+            <VotingContext.Provider value={[votes, setVotes, persistVote]}>
                 {highlights.slice(0, showCount).map((highlight) => (
                     <HighlightElement
                         key={highlight.id}
