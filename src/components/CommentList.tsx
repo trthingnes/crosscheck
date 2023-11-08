@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Post, Highlight } from '../utils/Types'
+import { Post } from '../utils/Types'
 import { updatePost } from '../utils/Firebase'
 import Comment from './Comment'
 import './componentsCss/CommentForm.css'

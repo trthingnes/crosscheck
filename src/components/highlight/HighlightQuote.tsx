@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Card } from 'semantic-ui-react'
-import Vote from './Vote'
+import Vote from '../Vote'
 import './componentsCss/HighlightQuote.css'
 
 const HighlightQuote = (props: {

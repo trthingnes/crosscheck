@@ -1,6 +1,6 @@
 import { Container, Grid } from 'semantic-ui-react'
 import { useEffect, useState } from 'react'
-import { HighlightElement } from '../components/HighlightElement'
+import { HighlightListElement } from '../components/highlight/HighlightListElement'
 import { ShowMoreLessButtons } from '../components/button/ShowMoreLessButtons'
 import { VotingContext } from '../components/button/VoteButtons'
 import { Highlight, Vote } from '../utils/Types'
@@ -72,7 +72,7 @@ export function HighlightsPage() {
         <Grid columns={1} padded>
             <VotingContext.Provider value={[votes, setVotes, persistVote]}>
                 {highlights.slice(0, showCount).map((highlight) => (
-                    <HighlightElement
+                    <HighlightListElement
                         key={highlight.id}
                         highlight={highlight}
                     />
