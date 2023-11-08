@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Card, Container, Grid } from 'semantic-ui-react'
+import { Container, Grid } from 'semantic-ui-react'
 import { ShowMoreLessButtons } from '../components/button/ShowMoreLessButtons'
 import { VotingContext } from '../components/button/VoteButtons'
 import { PostListElement } from '../components/post/PostListElement'
-import CommentForm from '../components/CommentForm'
+import PostCreateForm from '../components/post/PostCreateForm'
 import { DEFAULT_SHOW_COUNT } from '../utils/Constants'
 import { Post, Vote } from '../utils/Types'
 import { getPostsByHighlightId, updatePost } from '../utils/Firebase'
@@ -36,7 +36,7 @@ export function PostsPage() {
     return (
         <Grid columns={1}>
             <Grid.Row centered>
-                <CommentForm />
+                <PostCreateForm />
             </Grid.Row>
             <VotingContext.Provider value={[votes, setVotes, persistVote]}>
                 {posts.slice(0, showCount).map((post: Post) => (

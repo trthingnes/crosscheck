@@ -4,7 +4,7 @@ import { VoteButtons } from '../button/VoteButtons'
 
 export function PostListElement({ post }: { post: Post }) {
     return (
-        <Grid.Column style={{ padding: '0.5rem' }}>
+        <Grid.Column style={{ padding: '0.5rem 0' }}>
             <Card centered style={{ width: '90%' }}>
                 <Card.Content>
                     <Card.Description>{post.comment}</Card.Description>
