@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { Container, Grid } from 'semantic-ui-react'
+import { Link, useParams } from 'react-router-dom'
+import { Button, Container, Grid, Icon } from 'semantic-ui-react'
 import { ShowMoreLessButtons } from '../components/button/ShowMoreLessButtons'
 import { VotingContext } from '../components/button/VoteButtons'
 import { PostListElement } from '../components/post/PostListElement'
@@ -35,6 +35,11 @@ export function PostsPage() {
 
     return (
         <Grid columns={1}>
+            <Grid.Row centered>
+                <Button as={Link} to={-1}>
+                    <Icon name="arrow left" /> Back to list
+                </Button>
+            </Grid.Row>
             <Grid.Row centered>
                 <PostCreateForm />
             </Grid.Row>
