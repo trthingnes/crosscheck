@@ -28,6 +28,7 @@ function HighlightItem({ highlights }: { highlights: Highlight[] }) {
                 </div>
                 <CommentList
                     quote={highlight?.quote}
+                    id={highlight?.id}
                     posts={posts}
                     setPosts={setPosts}
                 />

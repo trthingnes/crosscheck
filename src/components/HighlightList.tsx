@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { updateHighlight } from '../utils/Firebase'
 import { Highlight } from '../utils/Types'
 import { HIGHLIGHT_BATCH_SIZE } from '../utils/Constants'
@@ -7,9 +7,11 @@ import HighlightQuote from './HighlightQuote'
 function HighlightsList({
     highlights,
     setHighlights,
+    url
 }: {
     highlights: Highlight[]
     setHighlights: (highlights: Highlight[]) => void
+    url: string
 }) {
     const [showAmount, setShowAmount] = useState(HIGHLIGHT_BATCH_SIZE)
     const [isUpvoted, setIsUpvoted] = useState(
@@ -18,6 +20,22 @@ function HighlightsList({
     const [isDownvoted, setIsDownvoted] = useState(
         Array(highlights.length).fill(false),
     )
+
+    useEffect(() => {
+        const votesFromStorage = localStorage.getItem(url)
+        if (votesFromStorage){
+            const votes = JSON.parse(votesFromStorage)
+            const newIsUpvoted = []
+            const newIsDownvoted = []
+            for (let i = 0; i < highlights.length; i++){
+                newIsUpvoted[i] = votes.upvoted[i] ? true : false
+                newIsDownvoted[i] = votes.downvoted[i] ? true : false
+            }           
+            setIsUpvoted(newIsUpvoted)
+            setIsDownvoted(newIsDownvoted)
+        } 
+
+    },[url, highlights.length])
 
     const updateHighlightInState = (highlight: Highlight) => {
         const updatedHighlights = [...highlights]
@@ -32,24 +50,29 @@ function HighlightsList({
             const newDownvoted = [...isDownvoted]
             newDownvoted[index] = false
             setIsDownvoted(newDownvoted)
+            localStorage.setItem(url,JSON.stringify({upvoted: isUpvoted, downvoted: newDownvoted}))
         } else {
             const newUpvoted = [...isUpvoted]
             newUpvoted[index] = true
             setIsUpvoted(newUpvoted)
+            localStorage.setItem(url,JSON.stringify({upvoted: newUpvoted, downvoted: isDownvoted}))
         }
         updateHighlight(highlight).then(() => updateHighlightInState(highlight))
     }
 
     const downvoteHighlight = (highlight: Highlight, index: number) => {
+        
         highlight.upvotes--
         if (isUpvoted[index]) {
             const newUpvoted = [...isUpvoted]
             newUpvoted[index] = false
             setIsUpvoted(newUpvoted)
+            localStorage.setItem(url,JSON.stringify({upvoted: newUpvoted, downvoted: isDownvoted}))
         } else {
             const newDownvoted = [...isDownvoted]
             newDownvoted[index] = true
             setIsDownvoted(newDownvoted)
+            localStorage.setItem(url,JSON.stringify({upvoted: isUpvoted, downvoted: newDownvoted}))
         }
         updateHighlight(highlight).then(() => updateHighlightInState(highlight))
     }
