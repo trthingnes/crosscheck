@@ -1,6 +1,4 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Button, Icon, Label } from 'semantic-ui-react'
 import { updateHighlight } from '../utils/Firebase'
 import { Highlight } from '../utils/Types'
 import { HIGHLIGHT_BATCH_SIZE } from '../utils/Constants'
@@ -58,59 +56,71 @@ function HighlightsList({
 
     const voteFunctions = {
         up: upvoteHighlight,
-        down: downvoteHighlight, 
-        upvoted: upvoted, 
-        downvoted: downvoted
+        down: downvoteHighlight,
+        upvoted: isUpvoted,
+        downvoted: isDownvoted,
     }
 
     return (
         <div>
-         
-            <div style={{paddingLeft:'10px', paddingTop:'10px', width: '450px', height:'400px', overflowY: 'scroll'}}>
-                {props.highlights
+            <div
+                style={{
+                    paddingLeft: '10px',
+                    paddingTop: '10px',
+                    width: '450px',
+                    height: '400px',
+                    overflowY: 'scroll',
+                }}
+            >
+                {highlights
                     .map((highlight: any, index: number) => {
                         return (
                             <div key={highlight.id}>
-                                <HighlightQuote quote={highlight} index={index} link={true} vote = {voteFunctions}/>
+                                <HighlightQuote
+                                    quote={highlight}
+                                    index={index}
+                                    link={true}
+                                    vote={voteFunctions}
+                                />
                             </div>
                         )
                     })
                     .filter((o: any, k: number) => k < showAmount)}
             </div>
-        
-            <div style={{paddingTop:'10px', paddingBottom:'10px'}}>
-            <button
-                id="show-more-button"
-                className="ui button"
-                type="button"
-                disabled={showAmount >= highlights.length}
-                onClick={() =>
-                    setShowAmount(
-                        Math.min(
-                            highlights.length,
-                            showAmount + HIGHLIGHT_BATCH_SIZE,
-                        ),
-                    )
-                }
-            >
-                More
-            </button>
-            <button
-                id="show-less-button"
-                className="ui button"
-                type="button"
-                disabled={showAmount <= 3}
-                onClick={() =>
-                    setShowAmount(
-                        Math.max(
-                            HIGHLIGHT_BATCH_SIZE,
-                            showAmount - HIGHLIGHT_BATCH_SIZE,
-                        ),
-                    )
-                }
-            >
-                Less
-            </button>
+
+            <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
+                <button
+                    id="show-more-button"
+                    className="ui button"
+                    type="button"
+                    disabled={showAmount >= highlights.length}
+                    onClick={() =>
+                        setShowAmount(
+                            Math.min(
+                                highlights.length,
+                                showAmount + HIGHLIGHT_BATCH_SIZE,
+                            ),
+                        )
+                    }
+                >
+                    More
+                </button>
+                <button
+                    id="show-less-button"
+                    className="ui button"
+                    type="button"
+                    disabled={showAmount <= 3}
+                    onClick={() =>
+                        setShowAmount(
+                            Math.max(
+                                HIGHLIGHT_BATCH_SIZE,
+                                showAmount - HIGHLIGHT_BATCH_SIZE,
+                            ),
+                        )
+                    }
+                >
+                    Less
+                </button>
             </div>
         </div>
     )

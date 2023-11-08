@@ -4,7 +4,7 @@ import { Header, Icon } from 'semantic-ui-react'
 import HighlightItem from './components/HighlightItem'
 import HighlightList from './components/HighlightList'
 import { Highlight } from './utils/Types'
-import { getHighlights, getHighlightsForUrl } from './utils/Firebase'
+import { getHighlightsForUrl } from './utils/Firebase'
 
 import 'semantic-ui-css/semantic.min.css'
 import './App.css'

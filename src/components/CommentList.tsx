@@ -1,17 +1,10 @@
-
-import React, { useState } from 'react';
-import {  Highlight, Post } from '../utils/Types'
-import { Header, Label, List } from 'semantic-ui-react';
-import { updatePost } from '../utils/Firebase';
-import Comment from './Comment';
+import { useState } from 'react'
+import { Post } from '../utils/Types'
+import { updatePost } from '../utils/Firebase'
+import Comment from './Comment'
 import './componentsCss/CommentForm.css'
-import CommentForm from './CommentForm';
 
-function CommentList(props: {
-    quote: any
-    posts: Post[]
-    setPosts: any
-}) {
+function CommentList(props: { quote: any; posts: Post[]; setPosts: any }) {
     const [showAmount, setShowAmount] = useState(3)
     const [upvoted, setUpvoted] = useState(
         Array(props.posts.length).fill(false),
@@ -29,11 +22,7 @@ function CommentList(props: {
         setShowAmount(Math.max(3, showAmount - 3))
     }
 
-    const upvotePost = (
-        post: Post,
-        index: number,
-        upvote: boolean,
-    ) => {
+    const upvotePost = (post: Post, index: number, upvote: boolean) => {
         post.upvotes++
         if (downvoted[index]) {
             const newDownvoted = [...downvoted]
@@ -51,11 +40,7 @@ function CommentList(props: {
         })
     }
 
-    const downvotePost = (
-        post: Post,
-        index: number,
-        upvote: boolean,
-    ) => {
+    const downvotePost = (post: Post, index: number, upvote: boolean) => {
         post.upvotes--
         if (upvoted[index]) {
             const newUpvoted = [...upvoted]
@@ -75,32 +60,38 @@ function CommentList(props: {
 
     const voteFunctions = {
         up: upvotePost,
-        down: downvotePost, 
-        upvoted: upvoted, 
-        downvoted: downvoted
+        down: downvotePost,
+        upvoted: upvoted,
+        downvoted: downvoted,
     }
 
-return(
-    
-    <div className='commentForm'>
-        
-            <div style={{paddingLeft:'10px', paddingTop:'10px', width: 'auto', height:'400px', overflowY: 'scroll'}}>
-                    {props.posts
-                        .map((comment: Post, index: number) => {
-                            return (
-                               <div key={comment.id}>
-                                    <Comment comment={comment} index={index} vote={voteFunctions} />
-                                 </div>
-                                
-                            )
-                        })
-                        .filter((o: any, k: number) => k < showAmount)}
-                </div>
-
-      
-        
-    </div>
-)
+    return (
+        <div className="commentForm">
+            <div
+                style={{
+                    paddingLeft: '10px',
+                    paddingTop: '10px',
+                    width: 'auto',
+                    height: '400px',
+                    overflowY: 'scroll',
+                }}
+            >
+                {props.posts
+                    .map((comment: Post, index: number) => {
+                        return (
+                            <div key={comment.id}>
+                                <Comment
+                                    comment={comment}
+                                    index={index}
+                                    vote={voteFunctions}
+                                />
+                            </div>
+                        )
+                    })
+                    .filter((o: any, k: number) => k < showAmount)}
+            </div>
+        </div>
+    )
 }
 
-export default CommentList;
+export default CommentList
