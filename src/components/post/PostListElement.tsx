@@ -14,7 +14,9 @@ export function PostListElement({ post }: { post: Post }) {
                                     Anonymous
                                 </Comment.Author>
                                 <Comment.Metadata>
-                                    <div>{post.timestamp.toDateString()}</div>
+                                    <div>
+                                        {post.timestamp.toDate().toDateString()}
+                                    </div>
                                 </Comment.Metadata>
                                 <Comment.Text>{post.comment}</Comment.Text>
                                 <Comment.Actions>

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom'
-import { Container, Grid, Header, Icon } from 'semantic-ui-react'
+import { Grid, Header, Icon } from 'semantic-ui-react'
 
 import { HighlightsPage } from './routes/HighlightsPage'
 import { PostsPage } from './routes/PostsPage'

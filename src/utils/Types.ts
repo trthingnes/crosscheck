@@ -1,10 +1,12 @@
+import { Timestamp } from 'firebase/firestore'
+
 export type Highlight = {
     id?: string
     url: string
     quote: string
     upvotes: number
     downvotes: number
-    timestamp: Date
+    timestamp: Timestamp
 }
 
 export type Post = {
@@ -14,7 +16,7 @@ export type Post = {
     sources: string[]
     upvotes: number
     downvotes: number
-    timestamp: Date
+    timestamp: Timestamp
 }
 
 export type Vote = {
