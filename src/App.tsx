@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom'
-import { Header, Icon } from 'semantic-ui-react'
+import { Container, Grid, Header, Icon } from 'semantic-ui-react'
 
 import { HighlightsPage } from './routes/HighlightsPage'
 import { PostsPage } from './routes/PostsPage'
@@ -20,17 +20,19 @@ function App() {
                 color="green"
                 textAlign="center"
                 size="medium"
-                style={{ marginTop: '1rem' }}
+                style={{ margin: '1rem 0 0 0' }}
             >
                 <Icon name="check" />
                 CrossCheck {totalContributions}
             </Header>
-            <Router>
-                <Routes>
-                    <Route index element={<HighlightsPage />}></Route>
-                    <Route path="/:id" element={<PostsPage />}></Route>
-                </Routes>
-            </Router>
+            <Grid padded>
+                <Router>
+                    <Routes>
+                        <Route index element={<HighlightsPage />}></Route>
+                        <Route path="/:id" element={<PostsPage />}></Route>
+                    </Routes>
+                </Router>
+            </Grid>
         </div>
     )
 }

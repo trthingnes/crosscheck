@@ -21,7 +21,7 @@ export const SAMPLE_POST: Post = {
     id: 'sample-post',
     highlight: SAMPLE_HIGHLIGHT,
     comment: 'This is an example comment',
-    sources: ['http://example.com'],
+    sources: ['http://example.com', 'http://example.com/page/page/page'],
     upvotes: 5,
     downvotes: 1,
     timestamp: new Date(),

@@ -1,23 +1,47 @@
-import { Card, Grid } from 'semantic-ui-react'
+import { Comment, Grid } from 'semantic-ui-react'
 import { Post } from '../../utils/Types'
 import { VoteButtons } from '../button/VoteButtons'
 
 export function PostListElement({ post }: { post: Post }) {
     return (
-        <Grid.Column style={{ padding: '0.5rem 0' }}>
-            <Card centered style={{ width: '90%' }}>
-                <Card.Content>
-                    <Card.Description>{post.comment}</Card.Description>
-                    <Card.Meta>10/10/2021 at 5:04PM</Card.Meta>
-                </Card.Content>
-                <Card.Content extra>
+        <Grid.Column>
+            <Grid columns="equal">
+                <Grid.Column verticalAlign="middle">
+                    <Comment.Group>
+                        <Comment>
+                            <Comment.Content>
+                                <Comment.Author as="span">
+                                    Anonymous
+                                </Comment.Author>
+                                <Comment.Metadata>
+                                    <div>{post.timestamp.toDateString()}</div>
+                                </Comment.Metadata>
+                                <Comment.Text>{post.comment}</Comment.Text>
+                                <Comment.Actions>
+                                    {post.sources.map((source) => (
+                                        <Comment.Action>
+                                            <a
+                                                href={source}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                            >
+                                                {new URL(source).hostname}
+                                            </a>
+                                        </Comment.Action>
+                                    ))}
+                                </Comment.Actions>
+                            </Comment.Content>
+                        </Comment>
+                    </Comment.Group>
+                </Grid.Column>
+                <Grid.Column textAlign="right" verticalAlign="middle" width={6}>
                     <VoteButtons
                         documentId={post.id || ''}
                         documentUpvotes={post.upvotes}
                         documentDownvotes={post.downvotes}
                     />
-                </Card.Content>
-            </Card>
+                </Grid.Column>
+            </Grid>
         </Grid.Column>
     )
 }

@@ -48,7 +48,7 @@ export function PostsPage() {
     }
 
     return (
-        <Grid columns={1}>
+        <Grid columns={1} padded>
             <Grid.Row centered>
                 <Button as={Link} to={-1}>
                     <Icon name="arrow left" /> Back to list

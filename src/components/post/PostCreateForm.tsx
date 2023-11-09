@@ -14,7 +14,7 @@ function PostCreateForm() {
 
     return (
         <Input
-            style={{ width: '90%' }}
+            style={{ width: '100%' }}
             action={{ content: 'Submit', onClick: handleSubmit }}
             placeholder="Comment..."
             value={newComment}
