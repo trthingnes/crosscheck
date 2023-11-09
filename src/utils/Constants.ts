@@ -14,6 +14,7 @@ export const SAMPLE_HIGHLIGHT: Highlight = {
     quote: 'This is an example quote',
     upvotes: 10,
     downvotes: 2,
+    timestamp: new Date(),
 }
 
 export const SAMPLE_POST: Post = {
@@ -23,6 +24,7 @@ export const SAMPLE_POST: Post = {
     sources: ['http://example.com'],
     upvotes: 5,
     downvotes: 1,
+    timestamp: new Date(),
 }
 
 export const DEFAULT_SHOW_COUNT = 3

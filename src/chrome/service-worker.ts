@@ -41,6 +41,7 @@ function handleContextMenuClick(data: chrome.contextMenus.OnClickData) {
                 quote: selection,
                 upvotes: 0,
                 downvotes: 0,
+                timestamp: new Date(),
             })
 
             // ! Opening the extension popup is not possible programatically. It seems like Google designed it that way.
