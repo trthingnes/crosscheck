@@ -47,7 +47,7 @@ export function HighlightsPage() {
         if (votesJson) {
             setVotes(JSON.parse(votesJson))
         }
-    }, [url, highlights.length])
+    }, [url])
 
     // Write votes to local storage when they are updated
     useEffect(() => {
