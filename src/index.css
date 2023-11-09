@@ -9,7 +9,10 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-        monospace;
+.App {
+    border: 1px black solid;
+    width: 450px;
+    height: 400px;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }

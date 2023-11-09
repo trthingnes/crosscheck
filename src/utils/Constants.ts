@@ -1,3 +1,4 @@
+import { Timestamp } from 'firebase/firestore'
 import { Highlight, Post } from './Types'
 
 /**
@@ -14,16 +15,18 @@ export const SAMPLE_HIGHLIGHT: Highlight = {
     quote: 'This is an example quote',
     upvotes: 10,
     downvotes: 2,
+    timestamp: Timestamp.now(),
 }
 
 export const SAMPLE_POST: Post = {
     id: 'sample-post',
     highlight: SAMPLE_HIGHLIGHT,
     comment: 'This is an example comment',
-    sources: ['http://example.com'],
+    sources: ['http://example.com', 'http://example.com/page/page/page'],
     upvotes: 5,
     downvotes: 1,
+    timestamp: Timestamp.now(),
 }
 
-export const HIGHLIGHT_BATCH_SIZE = 3
+export const DEFAULT_SHOW_COUNT = 3
 export const HIGHLIGHT_MIN_SIZE = 5

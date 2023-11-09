@@ -1,3 +1,4 @@
+import { Timestamp } from 'firebase/firestore'
 import { HIGHLIGHT_MIN_SIZE } from '../utils/Constants'
 import { addHighlight } from '../utils/Firebase'
 
@@ -41,6 +42,7 @@ function handleContextMenuClick(data: chrome.contextMenus.OnClickData) {
                 quote: selection,
                 upvotes: 0,
                 downvotes: 0,
+                timestamp: Timestamp.now(),
             })
 
             // ! Opening the extension popup is not possible programatically. It seems like Google designed it that way.
