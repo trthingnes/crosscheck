@@ -1,6 +1,6 @@
 import { Comment, Grid } from 'semantic-ui-react'
-import { Post } from '../../utils/Types'
-import { VoteButtons } from '../button/VoteButtons'
+import { Post } from '../utils/Types'
+import { VoteButtons } from './button/VoteButtons'
 
 export function PostListElement({ post }: { post: Post }) {
     return (
@@ -20,15 +20,14 @@ export function PostListElement({ post }: { post: Post }) {
                                 </Comment.Metadata>
                                 <Comment.Text>{post.comment}</Comment.Text>
                                 <Comment.Actions>
-                                    {post.sources.map((source) => (
-                                        <Comment.Action>
-                                            <a
-                                                href={source}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                            >
-                                                {new URL(source).hostname}
-                                            </a>
+                                    {post.sources.map((source, i) => (
+                                        <Comment.Action
+                                            key={i}
+                                            href={source}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            {new URL(source).hostname}
                                         </Comment.Action>
                                     ))}
                                 </Comment.Actions>

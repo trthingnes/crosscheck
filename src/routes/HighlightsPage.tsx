@@ -1,6 +1,6 @@
-import { Container, Grid } from 'semantic-ui-react'
+import { Container, Grid, Header, Icon } from 'semantic-ui-react'
 import { useEffect, useState } from 'react'
-import { HighlightListElement } from '../components/highlight/HighlightListElement'
+import { HighlightListElement } from '../components/HighlightListElement'
 import { ShowMoreLessButtons } from '../components/button/ShowMoreLessButtons'
 import { VotingContext } from '../components/button/VoteButtons'
 import { Highlight, Vote } from '../utils/Types'
@@ -70,6 +70,17 @@ export function HighlightsPage() {
 
     return (
         <Grid columns={1} padded>
+            {!highlights ||
+                (!highlights.length && (
+                    <Container>
+                        <Header icon>
+                            <Icon name="ban" />
+                            There are no highlights on this page yet! Why not
+                            add one by marking some text and submitting it
+                            through the context menu?
+                        </Header>
+                    </Container>
+                ))}
             <VotingContext.Provider value={[votes, setVotes, persistVote]}>
                 {highlights.slice(0, showCount).map((highlight) => (
                     <HighlightListElement
