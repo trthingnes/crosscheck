@@ -3,9 +3,10 @@ import { getHighlightsForUrl } from '../utils/Firebase'
 const url = window.location.href
 
 getHighlightsForUrl(url).then((highlights) => {
+    if (highlights.length === 0) return
+
     // Replace all exact quote with highlighted versions
     let html = document.body.innerHTML
-
     highlights.forEach((it) => {
         html = html.replaceAll(
             it.quote,
@@ -16,7 +17,6 @@ getHighlightsForUrl(url).then((highlights) => {
     </span>`,
         )
     })
-
     document.body.innerHTML = html
 })
 
