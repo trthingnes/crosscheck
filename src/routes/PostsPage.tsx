@@ -12,7 +12,10 @@ import {
 import { ShowMoreLessButtons } from '../components/button/ShowMoreLessButtons'
 import { VotingContext } from '../components/button/VoteButtons'
 import { PostListElement } from '../components/PostListElement'
-import { DEFAULT_SHOW_COUNT } from '../utils/Constants'
+import {
+    DEFAULT_SHOW_COUNT,
+    LOCALSTORAGE_CONTRIBUTIONS_KEY,
+} from '../utils/Constants'
 import { Post, Vote } from '../utils/Types'
 import {
     addPostToHighlight,
@@ -84,6 +87,14 @@ export function PostsPage() {
             return b.upvotes - b.downvotes - (a.upvotes - a.downvotes)
         })
         setPosts(newPosts)
+
+        const contributions = Number.parseInt(
+            localStorage.getItem(LOCALSTORAGE_CONTRIBUTIONS_KEY) || '0',
+        )
+        localStorage.setItem(
+            LOCALSTORAGE_CONTRIBUTIONS_KEY,
+            (contributions + 1).toString(),
+        )
     }
 
     return (
