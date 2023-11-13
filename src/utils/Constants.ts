@@ -30,3 +30,5 @@ export const SAMPLE_POST: Post = {
 
 export const DEFAULT_SHOW_COUNT = 3
 export const HIGHLIGHT_MIN_SIZE = 5
+
+export const LOCALSTORAGE_CONTRIBUTIONS_KEY = "contributions"
