@@ -1,11 +1,13 @@
 import { Timestamp } from 'firebase/firestore'
 import { HIGHLIGHT_MIN_SIZE } from '../utils/Constants'
-import { addHighlight } from '../utils/Firebase'
+import { addHighlight, getHighlightsForUrl } from '../utils/Firebase'
+import { Message, MessageType } from '../utils/Types'
 
 const contextMenuId = 'selection-submit'
 const contextMenuTitle = 'Submit highlighted text for discussion'
 const contextMenuContexts: chrome.contextMenus.ContextType[] = ['selection']
 
+// Initial setup when the extension is first installed
 chrome.runtime.onInstalled.addListener(function () {
     chrome.contextMenus.create({
         id: contextMenuId,
@@ -14,9 +16,10 @@ chrome.runtime.onInstalled.addListener(function () {
     })
 })
 
-chrome.contextMenus.onClicked.addListener(handleContextMenuClick)
-
-function handleContextMenuClick(data: chrome.contextMenus.OnClickData) {
+// Handle context menu clicks by the user
+chrome.contextMenus.onClicked.addListener(function (
+    data: chrome.contextMenus.OnClickData,
+) {
     if (data.menuItemId === contextMenuId) {
         const url = data.frameUrl
         const selection = data.selectionText
@@ -55,6 +58,23 @@ function handleContextMenuClick(data: chrome.contextMenus.OnClickData) {
             })
         }
     }
-}
+})
+
+// Handle messages from other parts of the Chrome extension (popup and content script)
+chrome.runtime.onMessage.addListener(function (
+    message: Message,
+    _sender,
+    sendResponse,
+) {
+    switch (message.type) {
+        case MessageType.GetHighlights:
+            const url = message.content as string
+            getHighlightsForUrl(url).then((highlights) => {
+                console.log('Fetched highlights', highlights)
+                sendResponse(highlights)
+            })
+    }
+    return true
+})
 
 export {}

@@ -1,8 +1,12 @@
-import { getHighlightsForUrl } from '../utils/Firebase'
+import { Highlight, MessageType } from '../utils/Types'
+;(async () => {
+    const url = window.location.href
 
-const url = window.location.href
+    const highlights = (await chrome.runtime.sendMessage({
+        type: MessageType.GetHighlights,
+        content: url,
+    })) as Highlight[]
 
-getHighlightsForUrl(url).then((highlights) => {
     // Replace all exact quote with highlighted versions
     let html = document.body.innerHTML
 
@@ -11,13 +15,13 @@ getHighlightsForUrl(url).then((highlights) => {
             it.quote,
             `<span title="This quote has ${
                 it.upvotes - it.downvotes
-            } score on CrossCheck." class="crosscheck-highlighted-text">
-        ${it.quote}
-    </span>`,
+            } score on CrossCheck." class="crosscheck-highlighted-text">${
+                it.quote
+            }</span>`,
         )
     })
 
     document.body.innerHTML = html
-})
+})()
 
 export {}

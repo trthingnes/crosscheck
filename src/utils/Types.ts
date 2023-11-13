@@ -28,3 +28,12 @@ export enum VoteType {
     'Upvote',
     'Downvote',
 }
+
+export type Message = {
+    type: MessageType
+    content: any
+}
+
+export enum MessageType {
+    'GetHighlights',
+}
