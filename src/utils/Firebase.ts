@@ -9,8 +9,8 @@ import {
     where,
     QuerySnapshot,
     DocumentData,
-    Timestamp ,
-    getCountFromServer
+    Timestamp,
+    getCountFromServer,
 } from 'firebase/firestore'
 import {
     FIREBASE_API_KEY,
@@ -57,15 +57,35 @@ async function getHighlightsForUrl(url?: string) {
     ).then(getDocumentsFromSnapshot)) as Highlight[]
 }
 
-async function getTotalLast7Days(){
-        if (OFFLINE_MODE) return 1
-        const currentTime = new Date()
-        const timeCutoff = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate()-7)
-        const highlightsQuery = query(highlightCollection, where("timestamp",">",timeCutoff))
-        const highlightsSnapshot = await getCountFromServer(highlightsQuery);
-        const postsQuery = query(postCollection, where("timestamp",">",timeCutoff))
-        const postsSnapshot = await getCountFromServer(postsQuery)
-        return highlightsSnapshot.data().count + postsSnapshot.data().count
+async function getHighlightById(highlightId: string) {
+    if (OFFLINE_MODE) return SAMPLE_HIGHLIGHT
+
+    return (
+        await getDocs(
+            query(highlightCollection, where('id', '==', highlightId)),
+        ).then(getDocumentsFromSnapshot)
+    )[0] as Highlight
+}
+
+async function getTotalLast7Days() {
+    if (OFFLINE_MODE) return 1
+    const currentTime = new Date()
+    const timeCutoff = new Date(
+        currentTime.getFullYear(),
+        currentTime.getMonth(),
+        currentTime.getDate() - 7,
+    )
+    const highlightsQuery = query(
+        highlightCollection,
+        where('timestamp', '>', timeCutoff),
+    )
+    const highlightsSnapshot = await getCountFromServer(highlightsQuery)
+    const postsQuery = query(
+        postCollection,
+        where('timestamp', '>', timeCutoff),
+    )
+    const postsSnapshot = await getCountFromServer(postsQuery)
+    return highlightsSnapshot.data().count + postsSnapshot.data().count
 }
 
 async function getPosts() {
@@ -156,11 +176,12 @@ async function updatePost(post: Post) {
 export {
     getHighlights,
     getHighlightsForUrl,
+    getHighlightById,
     getPosts,
     addPostToHighlight,
     updatePost,
     updateHighlight,
     addHighlight,
     getPostsByHighlightId,
-    getTotalLast7Days
+    getTotalLast7Days,
 }
