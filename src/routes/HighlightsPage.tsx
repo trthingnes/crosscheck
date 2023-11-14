@@ -1,19 +1,25 @@
-import { Container, Grid, Header, Icon } from 'semantic-ui-react'
+import { Container, Grid, Header, Icon, Segment } from 'semantic-ui-react'
 import { useEffect, useState } from 'react'
 import { HighlightListElement } from '../components/HighlightListElement'
 import { ShowMoreLessButtons } from '../components/button/ShowMoreLessButtons'
 import { VotingContext } from '../components/button/VoteButtons'
 import { Highlight, Vote } from '../utils/Types'
-import { DEFAULT_SHOW_COUNT } from '../utils/Constants'
-import { getHighlightsForUrl, updateHighlight } from '../utils/Firebase'
+import {
+    DEFAULT_SHOW_COUNT,
+    LOCALSTORAGE_CONTRIBUTIONS_KEY,
+} from '../utils/Constants'
+import {
+    getHighlightsForUrl,
+    getTotalLast7Days,
+    updateHighlight,
+} from '../utils/Firebase'
 
 export function HighlightsPage() {
-    const [url, setUrl] = useState('')
     const [showCount, setShowCount] = useState(DEFAULT_SHOW_COUNT)
-    const [highlights, setHighlights] = useState<Highlight[]>([])
-    const [votes, setVotes] = useState<Vote[]>([])
 
-    // Fetch highlights from database on page load
+    // Get url and highlights for page on load
+    const [url, setUrl] = useState('')
+    const [highlights, setHighlights] = useState<Highlight[]>([])
     useEffect(() => {
         async function getTabUrl() {
             if (chrome.tabs) {
@@ -41,7 +47,18 @@ export function HighlightsPage() {
         })
     }, [])
 
+    // Get this users contributions and all user contributions
+    const usersContributions =
+        localStorage.getItem(LOCALSTORAGE_CONTRIBUTIONS_KEY) || '0'
+    const [totalContributions, setTotalContributions] = useState(0)
+    useEffect(() => {
+        getTotalLast7Days().then((res) => {
+            setTotalContributions(res)
+        })
+    }, [])
+
     // Fetch votes from local storage when the loaded url changes
+    const [votes, setVotes] = useState<Vote[]>([])
     useEffect(() => {
         const votesJson = localStorage.getItem(url)
         if (votesJson) {
@@ -55,6 +72,7 @@ export function HighlightsPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [votes])
 
+    // Save updated vote counts to database
     function persistVote(highlightId: string, upvote: boolean) {
         const highlight = highlights.find((h) => h.id === highlightId)
 
@@ -70,6 +88,11 @@ export function HighlightsPage() {
 
     return (
         <Grid columns={1} padded>
+            <Segment size="tiny" textAlign="center">
+                <Icon name="group" />
+                You have contributed {usersContributions} out of{' '}
+                {totalContributions} total items in the last 7 days.
+            </Segment>
             {!highlights ||
                 (!highlights.length && (
                     <Container>

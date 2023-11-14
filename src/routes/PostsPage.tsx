@@ -16,9 +16,10 @@ import {
     DEFAULT_SHOW_COUNT,
     LOCALSTORAGE_CONTRIBUTIONS_KEY,
 } from '../utils/Constants'
-import { Post, Vote } from '../utils/Types'
+import { Highlight, Post, Vote } from '../utils/Types'
 import {
     addPostToHighlight,
+    getHighlightById,
     getPostsByHighlightId,
     updatePost,
 } from '../utils/Firebase'
@@ -26,16 +27,13 @@ import { Timestamp } from 'firebase/firestore'
 
 export function PostsPage() {
     const [showCount, setShowCount] = useState(DEFAULT_SHOW_COUNT)
-    const [votes, setVotes] = useState<Vote[]>([])
-    const [posts, setPosts] = useState<Post[]>([])
 
-    const [addPostModalOpen, setAddPostModalOpen] = useState<boolean>(false)
-    const [comment, setComment] = useState('')
-    const [source, setSource] = useState('')
-
+    // Fetch highlight & posts on load and when id changes
     const { id } = useParams()
-
+    const [highlight, setHighlight] = useState<Highlight>()
+    const [posts, setPosts] = useState<Post[]>([])
     useEffect(() => {
+        getHighlightById(id || '').then(setHighlight)
         getPostsByHighlightId(id || '').then((posts) =>
             setPosts(
                 posts.sort((a, b) => {
@@ -46,6 +44,7 @@ export function PostsPage() {
     }, [id])
 
     // Fetch votes from local storage when the loaded url changes
+    const [votes, setVotes] = useState<Vote[]>([])
     useEffect(() => {
         const votesJson = localStorage.getItem(id || '')
         if (votesJson) {
@@ -59,6 +58,7 @@ export function PostsPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [votes])
 
+    // Save updated vote counts to database
     function persistVote(postId: string, upvote: boolean) {
         const post = posts.find((p) => p.id === postId)
 
@@ -72,6 +72,12 @@ export function PostsPage() {
         }
     }
 
+    // Variables connected to the new post form
+    const [addPostModalOpen, setAddPostModalOpen] = useState<boolean>(false)
+    const [comment, setComment] = useState('')
+    const [source, setSource] = useState('')
+
+    // Save new post to database
     const persistPost = () => {
         setAddPostModalOpen(false)
         let newPost: Post = {
@@ -99,58 +105,55 @@ export function PostsPage() {
 
     return (
         <Grid columns={1} padded>
-            <Grid.Row centered>
-                <Button.Group>
-                    <Button as={Link} to={-1}>
-                        <Icon name="arrow left" /> Back to list
-                    </Button>
+            <Button.Group style={{ width: '100%' }}>
+                <Button as={Link} to={-1}>
+                    <Icon name="arrow left" /> Back to list
+                </Button>
 
-                    <Modal
-                        trigger={
-                            <Button color="green">
-                                <Icon name="plus" /> Add a post
-                            </Button>
-                        }
-                        open={addPostModalOpen}
-                        onOpen={() => setAddPostModalOpen(true)}
-                        onClose={() => setAddPostModalOpen(false)}
-                    >
-                        <Modal.Header>Add a post</Modal.Header>
-                        <Modal.Content>
-                            <Form onSubmit={persistPost}>
-                                <Form.Group widths="equal">
-                                    <Form.Input
-                                        value={comment}
-                                        placeholder="Comment"
-                                        onChange={(e) =>
-                                            setComment(e.target.value || '')
-                                        }
-                                    />
-                                    <Form.Input
-                                        value={source}
-                                        placeholder="Source"
-                                        onChange={(e) =>
-                                            setSource(e.target.value || '')
-                                        }
-                                    />
-                                </Form.Group>
-                                <Form.Group>
-                                    <Form.Button
-                                        type="button"
-                                        secondary
-                                        onClick={() =>
-                                            setAddPostModalOpen(false)
-                                        }
-                                    >
-                                        Cancel
-                                    </Form.Button>
-                                    <Form.Button primary>Submit</Form.Button>
-                                </Form.Group>
-                            </Form>
-                        </Modal.Content>
-                    </Modal>
-                </Button.Group>
-            </Grid.Row>
+                <Modal
+                    trigger={
+                        <Button color="green">
+                            <Icon name="plus" /> Add a post
+                        </Button>
+                    }
+                    open={addPostModalOpen}
+                    onOpen={() => setAddPostModalOpen(true)}
+                    onClose={() => setAddPostModalOpen(false)}
+                >
+                    <Modal.Header>Add a post</Modal.Header>
+                    <Modal.Content>
+                        <Form onSubmit={persistPost}>
+                            <Form.Group widths="equal">
+                                <Form.Input
+                                    value={comment}
+                                    placeholder="Comment"
+                                    onChange={(e) =>
+                                        setComment(e.target.value || '')
+                                    }
+                                />
+                                <Form.Input
+                                    value={source}
+                                    placeholder="Source"
+                                    onChange={(e) =>
+                                        setSource(e.target.value || '')
+                                    }
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Button
+                                    type="button"
+                                    secondary
+                                    onClick={() => setAddPostModalOpen(false)}
+                                >
+                                    Cancel
+                                </Form.Button>
+                                <Form.Button primary>Submit</Form.Button>
+                            </Form.Group>
+                        </Form>
+                    </Modal.Content>
+                </Modal>
+            </Button.Group>
+            <Header>Posts for '{highlight?.quote}'</Header>
             {!posts ||
                 (!posts.length && (
                     <Container>

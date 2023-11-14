@@ -1,9 +1,14 @@
 {
     "manifest_version": 3,
     "name": "CrossCheck",
-    "version": "1.0.0",
-
+    "version": "0.0.1",
     "description": "Crowdsourcing browser extension that allows users to contribute information about online content.",
+    "icons": {
+        "16": "icons/icon16.png",
+        "32": "icons/icon32.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    },
     "permissions": ["activeTab", "contextMenus", "notifications"],
     "action": {
         "default_popup": "index.html",
@@ -18,11 +23,5 @@
             "js": ["chrome/contentScript.js"],
             "css": ["styles.css"]
         }
-    ],
-    "icons": {
-        "16": "icons/icon16.png",
-        "32": "icons/icon32.png",
-        "48": "icons/icon48.png",
-        "128": "icons/icon128.png"
-    }
+    ]
 }
