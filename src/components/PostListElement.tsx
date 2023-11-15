@@ -8,7 +8,7 @@ export function PostListElement({ post }: { post: Post }) {
             return new URL(url).hostname
         } catch (error) {
             console.info(
-                `Could not cut URL ${url} because it does not validate.`,
+                `Could not cut URL '${url}' because it does not validate.`,
             )
         }
 

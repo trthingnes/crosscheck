@@ -61,11 +61,14 @@ export function AddPostForm({
                 <Form onSubmit={persistPost}>
                     <Form.Group widths="equal">
                         <Form.Input
+                            required
+                            type="text"
                             value={comment}
                             placeholder="Comment"
                             onChange={(e) => setComment(e.target.value || '')}
                         />
                         <Form.Input
+                            type="url"
                             value={source}
                             placeholder="Source"
                             onChange={(e) => setSource(e.target.value || '')}
