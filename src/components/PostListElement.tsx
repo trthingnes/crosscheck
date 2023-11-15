@@ -3,6 +3,18 @@ import { Post } from '../utils/Types'
 import { VoteButtons } from './button/VoteButtons'
 
 export function PostListElement({ post }: { post: Post }) {
+    function cutUrl(url: string) {
+        try {
+            return new URL(url).hostname
+        } catch (error) {
+            console.info(
+                `Could not cut URL ${url} because it does not validate.`,
+            )
+        }
+
+        return url
+    }
+
     return (
         <Grid.Column>
             <Grid columns="equal">
@@ -27,7 +39,7 @@ export function PostListElement({ post }: { post: Post }) {
                                             target="_blank"
                                             rel="noreferrer"
                                         >
-                                            {new URL(source).hostname}
+                                            {cutUrl(source)}
                                         </Comment.Action>
                                     ))}
                                 </Comment.Actions>

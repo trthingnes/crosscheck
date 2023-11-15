@@ -1,29 +1,17 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import {
-    Button,
-    Container,
-    Form,
-    Grid,
-    Header,
-    Icon,
-    Modal,
-} from 'semantic-ui-react'
+import { Button, Container, Grid, Header, Icon } from 'semantic-ui-react'
 import { ShowMoreLessButtons } from '../components/button/ShowMoreLessButtons'
 import { VotingContext } from '../components/button/VoteButtons'
 import { PostListElement } from '../components/PostListElement'
-import {
-    DEFAULT_SHOW_COUNT,
-    LOCALSTORAGE_CONTRIBUTIONS_KEY,
-} from '../utils/Constants'
+import { DEFAULT_SHOW_COUNT } from '../utils/Constants'
 import { Highlight, Post, Vote } from '../utils/Types'
 import {
-    addPostToHighlight,
     getHighlightById,
     getPostsByHighlightId,
     updatePost,
 } from '../utils/Firebase'
-import { Timestamp } from 'firebase/firestore'
+import { AddPostForm } from '../components/AddPostForm'
 
 export function PostsPage() {
     const [showCount, setShowCount] = useState(DEFAULT_SHOW_COUNT)
@@ -72,86 +60,17 @@ export function PostsPage() {
         }
     }
 
-    // Variables connected to the new post form
-    const [addPostModalOpen, setAddPostModalOpen] = useState<boolean>(false)
-    const [comment, setComment] = useState('')
-    const [source, setSource] = useState('')
-
-    // Save new post to database
-    const persistPost = () => {
-        setAddPostModalOpen(false)
-        let newPost: Post = {
-            comment: comment,
-            sources: [source],
-            upvotes: 0,
-            downvotes: 0,
-            timestamp: Timestamp.now(),
-        }
-        addPostToHighlight(id || '', newPost)
-
-        let newPosts = [...posts, newPost].sort((a, b) => {
-            return b.upvotes - b.downvotes - (a.upvotes - a.downvotes)
-        })
-        setPosts(newPosts)
-
-        const contributions = Number.parseInt(
-            localStorage.getItem(LOCALSTORAGE_CONTRIBUTIONS_KEY) || '0',
-        )
-        localStorage.setItem(
-            LOCALSTORAGE_CONTRIBUTIONS_KEY,
-            (contributions + 1).toString(),
-        )
-    }
-
     return (
         <Grid columns={1} padded>
             <Button.Group style={{ width: '100%' }}>
                 <Button as={Link} to={-1}>
                     <Icon name="arrow left" /> Back to list
                 </Button>
-
-                <Modal
-                    trigger={
-                        <Button color="green">
-                            <Icon name="plus" /> Add a post
-                        </Button>
-                    }
-                    open={addPostModalOpen}
-                    onOpen={() => setAddPostModalOpen(true)}
-                    onClose={() => setAddPostModalOpen(false)}
-                >
-                    <Modal.Header>Add a post</Modal.Header>
-                    <Modal.Content>
-                        <Form onSubmit={persistPost}>
-                            <Form.Group widths="equal">
-                                <Form.Input
-                                    value={comment}
-                                    placeholder="Comment"
-                                    onChange={(e) =>
-                                        setComment(e.target.value || '')
-                                    }
-                                />
-                                <Form.Input
-                                    value={source}
-                                    placeholder="Source"
-                                    onChange={(e) =>
-                                        setSource(e.target.value || '')
-                                    }
-                                />
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Button
-                                    type="button"
-                                    secondary
-                                    onClick={() => setAddPostModalOpen(false)}
-                                >
-                                    Cancel
-                                </Form.Button>
-                                <Form.Button primary>Submit</Form.Button>
-                            </Form.Group>
-                        </Form>
-                    </Modal.Content>
-                </Modal>
+                <AddPostForm
+                    highlightId={id || ''}
+                    posts={posts}
+                    setPosts={setPosts}
+                />
             </Button.Group>
             <Header>Posts for '{highlight?.quote}'</Header>
             {!posts ||
